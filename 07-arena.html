@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VEXOR · Arena</title>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Rajdhani:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* 60% #111317 preto | 30% #23272e grafite | 10% #ffd60a amarelo | #f2f2f2 | #8b9099 */
+:root{--base:#111317;--mid:#23272e;--acc:#ffd60a;--w:#f2f2f2;--mut:#8b9099}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Rajdhani',sans-serif;background:var(--base);color:var(--w);height:100dvh;position:relative;
+  display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto auto;column-gap:clamp(12px,2vw,28px);row-gap:clamp(8px,1.5vh,14px);padding:clamp(12px,2.4vh,24px) clamp(14px,3vw,40px) 8px}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:60px 60px;z-index:0}
+@media(hover:hover){*{cursor:none!important}}
+.orbit{position:fixed;left:38%;top:52%;width:70vh;aspect-ratio:1;border:1px solid rgba(255,255,255,.07);border-radius:50%;transform:translate(-50%,-50%);z-index:0}
+.orbit::after{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 14px var(--acc)}
+.orbit{animation:orb 12s linear infinite}
+@keyframes orb{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* topo */
+header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--mid);padding-bottom:10px;position:relative;z-index:3}
+.logo{font:700 1.3rem 'Rajdhani';letter-spacing:2px;display:flex;align-items:center;gap:8px}
+.logo i{width:28px;height:28px;background:var(--acc);clip-path:polygon(50% 0,100% 30%,85% 100%,15% 100%,0 30%)}
+.crumb{font:400 .7rem 'JetBrains Mono';color:var(--mut);letter-spacing:2px}
+.live{font:700 .85rem 'Rajdhani';letter-spacing:2px;display:flex;align-items:center;gap:8px}
+.live i{width:10px;height:10px;border-radius:50%;background:var(--acc);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+
+/* palco */
+.stage{position:relative;z-index:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;align-items:end}
+.graffiti{position:absolute;left:-2%;top:2%;width:100%;font:400 clamp(5rem,24vh,16rem)/1 'Permanent Marker';color:var(--acc);transform:rotate(-6deg);
+  white-space:nowrap;pointer-events:none;z-index:0;clip-path:inset(0 100% 0 0);animation:spray 1.6s .3s steps(18) forwards;filter:drop-shadow(0 0 1px var(--acc))}
+.graffiti::after{content:"";position:absolute;left:8%;right:20%;top:78%;height:40%;
+  background:repeating-linear-gradient(90deg,var(--acc) 0 4px,transparent 4px 46px,var(--acc) 46px 49px,transparent 49px 90px);
+  -webkit-mask:linear-gradient(#000,transparent);mask:linear-gradient(#000,transparent);animation:drip 3s 1.8s both}
+@keyframes spray{to{clip-path:inset(0 0 0 0)}}
+@keyframes drip{from{transform:scaleY(0);transform-origin:top}}
+.who{position:relative;z-index:2;align-self:end;padding-bottom:4vh}
+.who h1{font:700 clamp(2.4rem,7vh,4.4rem)/1 'Rajdhani';letter-spacing:1px}
+.who h1 span{display:inline-block;transition:.2s}
+.who h1:hover span{color:var(--acc);transform:translateY(calc(sin(var(--i)) * 6px))}
+.who p{font:400 .8rem 'JetBrains Mono';color:var(--mut);letter-spacing:2px}
+.who .id{margin-top:10px;display:inline-flex;gap:10px;align-items:center;border:1px solid var(--mid);padding:6px 10px;font:400 .75rem 'JetBrains Mono'}
+.who .id button{background:var(--acc);color:var(--base);border:none;font:700 .7rem 'JetBrains Mono';padding:3px 8px}
+.who .bio{margin-top:12px;max-width:40ch;font:500 clamp(.8rem,1.8vh,.95rem)/1.5 'Rajdhani';color:#c9ccd1}
+.hero{position:relative;z-index:1;display:flex;justify-content:center;align-items:flex-end;height:100%;min-height:0}
+.hero img{height:100%;max-height:62vh;filter:drop-shadow(0 0 40px rgba(255,214,10,.15));transition:transform .3s}
+.media{position:absolute;right:0;top:8%;width:clamp(180px,18vw,250px);border:2px solid var(--acc);background:var(--mid);padding:12px;z-index:3}
+.media small{font:700 .65rem 'JetBrains Mono';color:var(--acc);letter-spacing:3px}
+#song{display:block;font:700 1rem 'Rajdhani';margin:4px 0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow{display:flex;align-items:center;gap:10px}
+#play{width:42px;height:42px;border:none;background:var(--acc);color:var(--base);display:grid;place-items:center;clip-path:polygon(15% 0,100% 0,85% 100%,0 100%);transition:.2s}
+#play svg{width:18px;fill:currentColor}#play:hover{transform:scale(1.1)}
+#mute{background:none;border:none;color:var(--w);display:grid}#mute svg{width:18px;fill:currentColor}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:4px;background:linear-gradient(90deg,var(--acc) var(--v),#444 var(--v))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:16px;background:var(--w)}
+input[type=range]::-moz-range-thumb{width:8px;height:16px;border:none;border-radius:0;background:var(--w)}
+.eq{display:flex;gap:3px;height:18px;align-items:flex-end;margin-top:10px}
+.eq i{flex:1;height:15%;background:var(--acc);opacity:.7}
+body.playing .eq i{animation:eq .7s ease-in-out infinite alternate}
+.eq i:nth-child(2n){animation-delay:-.3s!important}.eq i:nth-child(3n){animation-delay:-.5s!important}
+@keyframes eq{to{height:100%}}
+
+/* time lateral */
+.team{grid-row:2/4;grid-column:2;position:relative;z-index:3;width:clamp(170px,16vw,230px);border-left:1px solid var(--mid);padding-left:clamp(10px,1.4vw,20px);display:flex;flex-direction:column;gap:8px;justify-content:center}
+.team h3{font:700 .7rem 'JetBrains Mono';letter-spacing:3px;color:var(--mut)}
+.mate{display:flex;align-items:center;gap:10px;padding:8px;background:var(--mid);position:relative;overflow:hidden;transition:.3s}
+.mate::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);transform:scaleY(0);transition:.3s}
+.mate:hover{transform:translateX(-6px)}.mate:hover::before{transform:none}
+.mate img{width:38px;height:38px;background:var(--base)}
+.mate b{font:700 .95rem 'Rajdhani';display:block}.mate small{font:400 .6rem 'JetBrains Mono';color:var(--mut)}
+
+/* estatísticas */
+.stats{grid-column:1;position:relative;z-index:3;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.st{background:rgba(35,39,46,.85);backdrop-filter:blur(6px);padding:clamp(10px,1.8vh,18px);position:relative;overflow:hidden;border:1px solid transparent;transition:.3s}
+.st small{font:400 .65rem 'JetBrains Mono';color:var(--acc);letter-spacing:2px}
+.st b{display:block;font:400 clamp(1.8rem,5vh,3rem)/1 'JetBrains Mono';margin-top:6px}
+.st::after{content:"";position:absolute;left:0;right:0;height:30%;top:-30%;background:linear-gradient(transparent,rgba(255,214,10,.15),transparent)}
+.st:hover{border-color:var(--acc);transform:translateY(-4px)}.st:hover::after{animation:scan 1s linear}
+@keyframes scan{to{top:100%}}
+.mini{grid-column:1/-1;display:flex;justify-content:space-between;background:var(--mid);padding:8px 14px;font:400 .72rem 'JetBrains Mono';color:var(--mut)}
+.mini b{color:var(--w);margin-left:6px}
+
+footer{grid-column:1/-1;position:relative;z-index:3;text-align:center;font:400 .68rem 'JetBrains Mono';color:var(--mut);letter-spacing:2px}
+footer a{color:var(--acc);text-decoration:none;font-weight:700}
+footer a:hover{background:var(--acc);color:var(--base)}
+
+/* cursor mira quadrada */
+.cur{position:fixed;width:28px;height:28px;margin:-14px;pointer-events:none;z-index:99;transition:transform .25s}
+.cur::before,.cur::after{content:"";position:absolute;background:var(--acc)}
+.cur::before{left:50%;top:0;bottom:0;width:2px;margin-left:-1px;-webkit-mask:linear-gradient(#000 35%,transparent 35% 65%,#000 65%);mask:linear-gradient(#000 35%,transparent 35% 65%,#000 65%)}
+.cur::after{top:50%;left:0;right:0;height:2px;margin-top:-1px;-webkit-mask:linear-gradient(90deg,#000 35%,transparent 35% 65%,#000 65%);mask:linear-gradient(90deg,#000 35%,transparent 35% 65%,#000 65%)}
+.cur.hov{transform:rotate(45deg) scale(1.4)}
+@media(hover:none){.cur{display:none}}
+
+#enter{position:fixed;inset:0;z-index:90;background:var(--base);display:grid;place-items:center;transition:.6s}
+#enter p{font:400 clamp(2rem,6vw,4rem) 'Permanent Marker';color:var(--acc);transform:rotate(-4deg)}
+#enter small{display:block;text-align:center;font:400 .75rem 'JetBrains Mono';letter-spacing:5px;color:var(--w)}
+#enter.hide{clip-path:inset(0 0 100% 0)}
+#enter{clip-path:inset(0 0 0 0)}
+#toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-80px);background:var(--acc);color:var(--base);padding:8px 18px;z-index:95;transition:.4s;font:700 .8rem 'JetBrains Mono'}
+#toast.show{transform:translate(-50%,0)}
+
+@media(max-width:860px){
+  body{grid-template-columns:1fr}
+  .team{grid-row:auto;grid-column:1;width:100%;flex-direction:row;border:0;padding:0}.team h3{display:none}
+  .mate{flex:1;flex-direction:column;padding:4px}.mate small{display:none}.mate b{font-size:.7rem}
+  .stage{grid-template-columns:1fr}.graffiti{font-size:5rem}.crumb{display:none}.hero{position:absolute;inset:0;opacity:.35}
+  .media{position:relative;top:auto;width:100%}.mini{display:none}.who .bio{display:none}
+}
+</style>
+</head>
+<body>
+<div class="orbit"></div>
+<div id="enter"><div><p>GG, entra aí!</p><small>[ CLIQUE PARA JOGAR ]</small></div></div>
+<div id="toast">ID COPIADO ✓</div>
+<div class="cur" id="cur"></div>
+
+<header>
+  <div class="logo"><i></i>NOVA ESPORTS</div>
+  <div class="crumb">VALORANT &gt; PERFIL</div>
+  <div class="live"><i></i>AO VIVO</div>
+</header>
+
+<section class="stage">
+  <div class="graffiti">VEXOR</div>
+  <div class="who">
+    <h1 data-split>VEXOR</h1>
+    <p>THIAGO MOURA · DUELISTA 🇧🇷</p>
+    <div class="id">ID #VXR-0099 <button data-copy="#VXR-0099">COPIAR</button></div>
+    <p class="bio">Duelista agressivo, mira de outro planeta e zero paciência para rotação lenta. Campeão regional 2025 e eterno viciado em energético de maracujá.</p>
+  </div>
+  <div class="hero"><img id="hero" src="https://api.dicebear.com/9.x/avataaars/svg?seed=VexorPro&accessories=prescription02" alt="Vexor"></div>
+  <div class="media">
+    <small>MEDIA ▸ PLAYER</small>
+    <span id="song"></span>
+    <div class="mrow">
+      <button id="play"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button id="mute"><svg id="vico" viewBox="0 0 24 24"></svg></button>
+      <input type="range" id="volume" min="0" max="100">
+    </div>
+    <div class="eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+</section>
+
+<aside class="team">
+  <h3>LINE-UP</h3>
+  <div class="mate"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Kairo" alt=""><div><b>KAIRO</b><small>CONTROLADOR</small></div></div>
+  <div class="mate"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Luma" alt=""><div><b>LUMA</b><small>SENTINELA</small></div></div>
+  <div class="mate"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Drako" alt=""><div><b>DRAKO</b><small>INICIADOR</small></div></div>
+  <div class="mate"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Pixel" alt=""><div><b>PIXEL</b><small>FLEX</small></div></div>
+  <div class="mate"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Bruma" alt=""><div><b>BRUMA</b><small>COACH</small></div></div>
+</aside>
+
+<section class="stats">
+  <div class="st"><small>PARTIDAS</small><b data-n="482">0</b></div>
+  <div class="st"><small>VITÓRIAS</small><b data-n="311">0</b></div>
+  <div class="st"><small>KDA MÉDIO</small><b data-n="2.47" data-d="2">0</b></div>
+  <div class="mini"><span>HS%<b>31%</b></span><span>ACS<b>268</b></span><span>CLUTCH<b>47</b></span><span>RANK<b>RADIANTE</b></span></div>
+</section>
+
+<footer>FEITO POR <a href="https://xat.com/rav" target="_blank" rel="noopener">ZARK</a></footer>
+
+<script>
+const MUSIC = { id:"jfKfPfyJRdk", title:"", volume:50 };
+
+/* contadores */
+document.querySelectorAll('[data-n]').forEach(el=>{const n=+el.dataset.n,d=+(el.dataset.d||0);let t0;
+  const step=t=>{t0??=t;const p=Math.min((t-t0)/1800,1),e=1-Math.pow(1-p,3);el.textContent=(n*e).toFixed(d);if(p<1)requestAnimationFrame(step)};
+  setTimeout(()=>requestAnimationFrame(step),600)});
+
+/* cursor + parallax do herói */
+const cur=document.getElementById('cur'),hero=document.getElementById('hero');
+addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  hero.style.transform=`translate(${(e.clientX/innerWidth-.5)*-20}px,${(e.clientY/innerHeight-.5)*-10}px)`});
+document.querySelectorAll('button,a,.mate,.st').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hov'));el.addEventListener('mouseleave',()=>cur.classList.remove('hov'))});
+</script>
+<script>/* ===== Player YouTube (só áudio) + utilidades ===== */
+(function(){
+  const PREVIEW = /[?&]preview/.test(location.search);
+  if (PREVIEW) { const e=document.getElementById('enter'); if(e) e.remove(); }
+  const $ = id => document.getElementById(id);
+  const M = window.MUSIC || {};
+  const I_PLAY  = '<path d="M8 5v14l11-7z"/>';
+  const I_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  const V_ON  = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/>';
+  const V_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.4-2.4-1.4-1.4-2.4 2.4-2.4-2.4-1.4 1.4 2.4 2.4-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4z"/>';
+
+  /* separa letras para animar: <h1 data-split>Nome</h1> */
+  document.querySelectorAll('[data-split]').forEach(el => {
+    el.innerHTML = [...el.textContent].map((c,i) =>
+      c === ' ' ? '<span class="sp">&nbsp;</span>' : `<span style="--i:${i}">${c}</span>`).join('');
+  });
+
+  /* copiar ID: <button data-copy="#ID"> */
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard && navigator.clipboard.writeText(b.dataset.copy);
+    const t = $('toast'); if (!t) return;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600);
+  }));
+
+  /* iframe escondido */
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:200px;height:200px;opacity:0;pointer-events:none';
+  holder.innerHTML = '<div id="yt"></div>';
+  document.body.appendChild(holder);
+
+  let yt, ready = false, playing = false, want = false;
+  const song = $('song');
+  if (song) song.textContent = M.title || 'Clique em play';
+
+  window.onYouTubeIframeAPIReady = () => {
+    yt = new YT.Player('yt', {
+      videoId: M.id,
+      playerVars: { autoplay:0, controls:0, loop:1, playlist:M.id, playsinline:1 },
+      events: {
+        onReady: () => { ready = true; yt.setVolume(M.volume ?? 50); if (want) yt.playVideo(); },
+        onStateChange: e => {
+          playing = e.data === YT.PlayerState.PLAYING;
+          document.body.classList.toggle('playing', playing);
+          const i = $('ico'); if (i) i.innerHTML = playing ? I_PAUSE : I_PLAY;
+          if (playing && !M.title && song) { const t = yt.getVideoData().title; if (t) song.textContent = t; }
+        }
+      }
+    });
+  };
+  const s = document.createElement('script');
+  if (!PREVIEW) s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+
+  const play = () => { want = true; if (ready) yt.playVideo(); };
+  const pb = $('play');
+  if (pb) pb.addEventListener('click', e => { e.stopPropagation(); if (!ready) return play(); playing ? yt.pauseVideo() : yt.playVideo(); });
+
+  const seek = d => { if (ready) yt.seekTo(Math.max(0, yt.getCurrentTime() + d), true); };
+  $('prev') && $('prev').addEventListener('click', e => { e.stopPropagation(); seek(-10); });
+  $('next') && $('next').addEventListener('click', e => { e.stopPropagation(); seek(10); });
+
+  const v = $('volume');
+  if (v) {
+    v.value = M.volume ?? 50;
+    const upd = () => {
+      v.style.setProperty('--v', v.value + '%');
+      if (ready) { yt.setVolume(+v.value); yt.unMute(); }
+      const vi = $('vico'); if (vi) vi.innerHTML = +v.value === 0 ? V_OFF : V_ON;
+    };
+    v.addEventListener('input', upd); upd();
+    let last = v.value;
+    $('mute') && $('mute').addEventListener('click', e => {
+      e.stopPropagation();
+      if (+v.value > 0) { last = v.value; v.value = 0; } else v.value = last || 50;
+      upd();
+    });
+  }
+
+  /* tela de entrada: o clique libera o som */
+  const en = $('enter');
+  if (en) en.addEventListener('click', () => { en.classList.add('hide'); play(); });
+})();
+</script>
+</body>
+</html>

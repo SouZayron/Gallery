@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nami Shiori · Oceano</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* 60% #d6ebfa céu  | 30% #2f6fa0 oceano | 10% #ff7aa6 coral | texto #0f2f4d | branco #ffffff */
+:root{--base:#d6ebfa;--mid:#2f6fa0;--acc:#ff7aa6;--ink:#0f2f4d;--w:#ffffff}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Fredoka',sans-serif;color:var(--ink);background:var(--base);
+  height:100dvh;display:grid;grid-template-rows:1fr auto;padding:clamp(14px,3vh,34px) clamp(14px,4vw,60px) 8px;
+  background-image:linear-gradient(rgba(47,111,160,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(47,111,160,.08) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+@media(hover:hover){*{cursor:none!important}}
+
+/* ---------- bolhas de fundo ---------- */
+.bubble{position:fixed;bottom:-120px;border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),rgba(255,255,255,.15) 40%,rgba(47,111,160,.12) 70%);
+  border:1px solid rgba(255,255,255,.8);animation:rise linear forwards}
+@keyframes rise{to{transform:translate(var(--dx),-120vh)}}
+.water{position:fixed;inset:auto -10% -40px;height:30vh;z-index:0;opacity:.35;
+  background:radial-gradient(ellipse at 50% 100%,var(--mid),transparent 70%);animation:sway 8s ease-in-out infinite alternate}
+@keyframes sway{to{transform:translateX(5%)}}
+.wm{position:fixed;right:-2vw;bottom:-6vh;font-size:30vh;font-weight:700;color:var(--mid);opacity:.08;z-index:0;letter-spacing:-.04em;white-space:nowrap}
+
+/* ---------- palco com cartões empilhados ---------- */
+.stage{position:relative;z-index:1;min-height:0}
+.stage::before,.stage::after{content:"";position:absolute;inset:0;border-radius:28px;background:var(--w);opacity:.5;transform:rotate(-2.5deg)}
+.stage::after{opacity:.75;transform:rotate(1.4deg)}
+.card{
+  position:relative;z-index:1;height:100%;border-radius:28px;background:linear-gradient(160deg,#eaf5fe,#cfe5f7);
+  border:3px solid var(--w);box-shadow:0 20px 50px rgba(15,47,77,.18);
+  display:grid;grid-template-columns:1fr 1.25fr 1fr;grid-template-rows:1fr auto;gap:clamp(10px,2vh,20px);
+  padding:clamp(14px,3vh,30px);overflow:hidden;
+}
+.card::before{content:"";position:absolute;left:-10%;top:-30%;width:45%;aspect-ratio:1;border-radius:50%;border:38px solid var(--mid);opacity:.9}
+
+/* coluna esquerda */
+.left{position:relative;display:flex;flex-direction:column;gap:14px;min-height:0;justify-content:center}
+.photo{width:62%;aspect-ratio:1;border-radius:20px;border:5px solid var(--mid);background:var(--w);overflow:hidden;align-self:center}
+.photo img{width:100%;height:100%;transition:transform .5s}
+.photo:hover img{transform:scale(1.12) rotate(-3deg)}
+.bio{background:var(--mid);color:var(--w);padding:16px 18px;border-radius:20px;font-size:clamp(.75rem,1.7vh,.95rem);line-height:1.5}
+.pill{align-self:flex-start;background:var(--w);color:var(--mid);border:2px solid var(--mid);border-radius:30px;padding:6px 14px;font-weight:600;font-size:.85rem;display:flex;gap:8px;align-items:center}
+.pill button{border:none;background:var(--acc);color:var(--w);border-radius:20px;padding:3px 10px;font:600 .75rem 'Fredoka'}
+
+/* centro */
+.center{position:relative;display:grid;place-items:center;min-height:0}
+.hero{height:min(100%,52vh);aspect-ratio:1;position:relative;animation:bob 4s ease-in-out infinite}
+.hero img{width:100%;height:100%;filter:drop-shadow(0 18px 20px rgba(15,47,77,.25))}
+@keyframes bob{50%{transform:translateY(-12px) rotate(1deg)}}
+.name{position:absolute;left:-6%;bottom:2%;line-height:.85;font-size:clamp(2.4rem,9vh,6rem);font-weight:700;color:var(--mid)}
+.name .ln span{display:inline-block;paint-order:stroke fill;-webkit-text-stroke:10px var(--w);
+  text-shadow:0 6px 0 rgba(15,47,77,.15);animation:bounce 2.4s ease-in-out infinite;animation-delay:calc(var(--i)*.09s)}
+.name small{display:block;font-size:.5em;color:var(--acc)}
+@keyframes bounce{0%,100%{transform:translateY(0) rotate(0)}20%{transform:translateY(-10px) rotate(-4deg)}40%{transform:translateY(0)}}
+.star{position:absolute;width:clamp(44px,8vh,70px);aspect-ratio:1;border-radius:16px;background:var(--w);display:grid;place-items:center;
+  box-shadow:0 8px 0 var(--mid);color:var(--mid);font-size:1.8rem;animation:spin 9s linear infinite}
+.star.s1{top:8%;left:4%}.star.s2{bottom:18%;right:2%;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* direita */
+.right{display:flex;flex-direction:column;gap:12px;min-height:0;justify-content:center}
+.right h2{font-size:clamp(1rem,2.4vh,1.3rem);color:var(--mid)}
+.friend{display:flex;align-items:center;gap:12px;background:var(--w);border:3px solid transparent;border-radius:18px;padding:6px 10px;transition:.3s}
+.friend img{width:clamp(34px,6vh,48px);aspect-ratio:1;border-radius:14px;background:var(--base)}
+.friend b{font-size:.95rem}.friend small{display:block;color:var(--mid);font-size:.72rem}
+.friend:hover{border-color:var(--mid);animation:jelly .6s}
+@keyframes jelly{30%{transform:scale(1.08,.92)}50%{transform:scale(.95,1.05)}70%{transform:scale(1.03,.97)}}
+
+/* player (estilo bateria) */
+.player{grid-column:1/-1;display:flex;align-items:center;gap:14px;background:var(--mid);border-radius:40px;padding:8px 10px;color:var(--w)}
+.btn{width:46px;height:46px;border-radius:50%;border:none;background:var(--w);color:var(--mid);display:grid;place-items:center;transition:.25s;flex-shrink:0}
+.btn svg{width:20px;fill:currentColor}
+.btn:hover{background:var(--acc);color:var(--w);transform:scale(1.1) rotate(-8deg)}
+.meter{flex:1;min-width:0;background:rgba(255,255,255,.15);border-radius:30px;height:42px;position:relative;overflow:hidden;display:flex;align-items:center;padding:0 16px}
+.meter::before{content:"";position:absolute;inset:0;width:0;background:rgba(255,255,255,.18);transition:width 1s}
+body.playing .meter::before{width:100%;animation:fill 6s linear infinite}
+@keyframes fill{from{width:0}to{width:100%}}
+#song{position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.vol{display:flex;align-items:center;gap:8px;padding-right:8px}
+.vol button{background:none;border:none;color:var(--w);display:grid}.vol svg{width:20px;fill:currentColor}
+input[type=range]{-webkit-appearance:none;appearance:none;width:110px;height:8px;border-radius:8px;background:linear-gradient(90deg,var(--acc) var(--v),rgba(255,255,255,.3) var(--v))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--w)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:var(--w)}
+
+footer{text-align:center;font-size:.8rem;color:var(--mid);padding-top:10px;position:relative;z-index:1}
+footer a{color:var(--acc);font-weight:700;text-decoration:none}
+footer a:hover{text-decoration:underline wavy}
+
+/* cursor bolha */
+.cur{position:fixed;left:0;top:0;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:2px solid var(--mid);
+  background:radial-gradient(circle at 30% 30%,#fff,rgba(255,255,255,.2));pointer-events:none;z-index:99;transition:width .2s,height .2s,margin .2s}
+.cur.big{width:46px;height:46px;margin:-23px 0 0 -23px;border-color:var(--acc)}
+.trail{position:fixed;width:8px;height:8px;border-radius:50%;border:1px solid var(--mid);pointer-events:none;z-index:98;animation:pop .8s forwards}
+@keyframes pop{to{transform:translateY(-30px) scale(0);opacity:0}}
+@media(hover:none){.cur{display:none}}
+
+#enter{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(214,235,250,.92);backdrop-filter:blur(6px);transition:.7s}
+#enter p{font-size:1.6rem;font-weight:700;color:var(--mid);animation:bounce 1.6s infinite}
+#enter.hide{opacity:0;pointer-events:none}
+#toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-80px);background:var(--acc);color:#fff;padding:8px 18px;border-radius:20px;z-index:95;transition:.4s;font-weight:600}
+#toast.show{transform:translate(-50%,0)}
+
+@media(max-width:820px){
+  .card{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto}
+  .center{grid-column:1/-1;grid-row:1}.hero{height:28vh}.name{font-size:2.6rem;left:0}
+  .photo,.star{display:none}.bio{font-size:.72rem;padding:10px}
+  .friend small{display:none}.friend{padding:4px 6px}.right h2{display:none}
+  input[type=range]{width:60px}
+}
+</style>
+</head>
+<body>
+<div class="water"></div><div class="wm">SHIORI</div>
+<div id="enter"><p>🫧 toque para mergulhar 🫧</p></div>
+<div id="toast">ID copiado!</div>
+<div class="cur" id="cur"></div>
+
+<div class="stage">
+  <div class="card">
+    <div class="left">
+      <div class="photo"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=NamiPhoto&backgroundColor=ffffff" alt="Nami"></div>
+      <div class="pill">ID #SHK-2208 <button data-copy="#SHK-2208">copiar</button></div>
+      <p class="bio">Nami Shiori é uma VTuber tubarão que jura ter nadado da Atlântida até a internet. Faz lives de jogos de ritmo, desenha peixinhos e perde todas as discussões sobre qual é o melhor sabor de sorvete.</p>
+    </div>
+
+    <div class="center">
+      <div class="star s1">★</div><div class="star s2">★</div>
+      <div class="hero"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Shiori" alt=""></div>
+      <h1 class="name"><small>✦ VTuber</small><span class="ln" data-split>NAMI</span><br><span class="ln" data-split>SHIORI</span></h1>
+    </div>
+
+    <div class="right">
+      <h2>Cardume de amigos 🐟</h2>
+      <div class="friend"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Coral" alt=""><div><b>Coral Minami</b><small>polvo artista</small></div></div>
+      <div class="friend"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Pearl" alt=""><div><b>Pearl Asahi</b><small>sereia cantora</small></div></div>
+      <div class="friend"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Kelp" alt=""><div><b>Kelp Hayato</b><small>tartaruga gamer</small></div></div>
+      <div class="friend"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Moana77" alt=""><div><b>Riri Umino</b><small>água-viva DJ</small></div></div>
+      <div class="friend"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Tidal" alt=""><div><b>Tide Kaito</b><small>baleia editora</small></div></div>
+    </div>
+
+    <div class="player">
+      <button class="btn" id="play"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <div class="meter"><span id="song"></span></div>
+      <div class="vol"><button id="mute"><svg id="vico" viewBox="0 0 24 24"></svg></button><input type="range" id="volume" min="0" max="100"></div>
+    </div>
+  </div>
+</div>
+
+<footer>Feito por <a href="https://xat.com/rav" target="_blank" rel="noopener">Zark</a></footer>
+
+<script>
+const MUSIC = { id:"jfKfPfyJRdk", title:"", volume:50 };  /* troque o ID do YouTube */
+
+/* bolhas subindo */
+setInterval(()=>{
+  const b=document.createElement('div'),s=10+Math.random()*50;
+  b.className='bubble';b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}vw;--dx:${(Math.random()-.5)*120}px;animation-duration:${8+Math.random()*8}s`;
+  document.body.appendChild(b);setTimeout(()=>b.remove(),17000);
+},700);
+
+/* cursor bolha + rastro */
+const cur=document.getElementById('cur');let t=0;
+addEventListener('mousemove',e=>{
+  cur.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;
+  if(Date.now()-t>60){t=Date.now();const d=document.createElement('div');d.className='trail';
+    d.style.left=e.clientX-4+'px';d.style.top=e.clientY-4+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),800);}
+});
+document.querySelectorAll('button,.friend,.photo,a').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+</script>
+<script>/* ===== Player YouTube (só áudio) + utilidades ===== */
+(function(){
+  const PREVIEW = /[?&]preview/.test(location.search);
+  if (PREVIEW) { const e=document.getElementById('enter'); if(e) e.remove(); }
+  const $ = id => document.getElementById(id);
+  const M = window.MUSIC || {};
+  const I_PLAY  = '<path d="M8 5v14l11-7z"/>';
+  const I_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  const V_ON  = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/>';
+  const V_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.4-2.4-1.4-1.4-2.4 2.4-2.4-2.4-1.4 1.4 2.4 2.4-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4z"/>';
+
+  /* separa letras para animar: <h1 data-split>Nome</h1> */
+  document.querySelectorAll('[data-split]').forEach(el => {
+    el.innerHTML = [...el.textContent].map((c,i) =>
+      c === ' ' ? '<span class="sp">&nbsp;</span>' : `<span style="--i:${i}">${c}</span>`).join('');
+  });
+
+  /* copiar ID: <button data-copy="#ID"> */
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard && navigator.clipboard.writeText(b.dataset.copy);
+    const t = $('toast'); if (!t) return;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600);
+  }));
+
+  /* iframe escondido */
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:200px;height:200px;opacity:0;pointer-events:none';
+  holder.innerHTML = '<div id="yt"></div>';
+  document.body.appendChild(holder);
+
+  let yt, ready = false, playing = false, want = false;
+  const song = $('song');
+  if (song) song.textContent = M.title || 'Clique em play';
+
+  window.onYouTubeIframeAPIReady = () => {
+    yt = new YT.Player('yt', {
+      videoId: M.id,
+      playerVars: { autoplay:0, controls:0, loop:1, playlist:M.id, playsinline:1 },
+      events: {
+        onReady: () => { ready = true; yt.setVolume(M.volume ?? 50); if (want) yt.playVideo(); },
+        onStateChange: e => {
+          playing = e.data === YT.PlayerState.PLAYING;
+          document.body.classList.toggle('playing', playing);
+          const i = $('ico'); if (i) i.innerHTML = playing ? I_PAUSE : I_PLAY;
+          if (playing && !M.title && song) { const t = yt.getVideoData().title; if (t) song.textContent = t; }
+        }
+      }
+    });
+  };
+  const s = document.createElement('script');
+  if (!PREVIEW) s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+
+  const play = () => { want = true; if (ready) yt.playVideo(); };
+  const pb = $('play');
+  if (pb) pb.addEventListener('click', e => { e.stopPropagation(); if (!ready) return play(); playing ? yt.pauseVideo() : yt.playVideo(); });
+
+  const seek = d => { if (ready) yt.seekTo(Math.max(0, yt.getCurrentTime() + d), true); };
+  $('prev') && $('prev').addEventListener('click', e => { e.stopPropagation(); seek(-10); });
+  $('next') && $('next').addEventListener('click', e => { e.stopPropagation(); seek(10); });
+
+  const v = $('volume');
+  if (v) {
+    v.value = M.volume ?? 50;
+    const upd = () => {
+      v.style.setProperty('--v', v.value + '%');
+      if (ready) { yt.setVolume(+v.value); yt.unMute(); }
+      const vi = $('vico'); if (vi) vi.innerHTML = +v.value === 0 ? V_OFF : V_ON;
+    };
+    v.addEventListener('input', upd); upd();
+    let last = v.value;
+    $('mute') && $('mute').addEventListener('click', e => {
+      e.stopPropagation();
+      if (+v.value > 0) { last = v.value; v.value = 0; } else v.value = last || 50;
+      upd();
+    });
+  }
+
+  /* tela de entrada: o clique libera o som */
+  const en = $('enter');
+  if (en) en.addEventListener('click', () => { en.classList.add('hide'); play(); });
+})();
+</script>
+</body>
+</html>

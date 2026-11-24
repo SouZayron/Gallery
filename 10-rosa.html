@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIRA ROSE · Neon</title>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* 60% #0d0508 noite | 30% #3b0f22 vinho | 10% #ff2d7a rosa neon | #ffe6ef | #b77d93 */
+:root{--base:#0d0508;--mid:#3b0f22;--acc:#ff2d7a;--w:#ffe6ef;--mut:#b77d93}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Montserrat',sans-serif;background:var(--base);color:var(--w);height:100dvh;position:relative;
+  display:grid;grid-template-rows:auto 1fr auto auto;gap:clamp(8px,1.6vh,16px);padding:clamp(12px,2.4vh,24px) clamp(14px,4vw,60px) 8px}
+@media(hover:hover){*{cursor:none!important}}
+.smoke{position:fixed;border-radius:50%;filter:blur(60px);z-index:0;opacity:.5;animation:smoke 16s ease-in-out infinite alternate}
+.smoke.s1{width:50vw;height:40vh;background:var(--mid);top:10%;left:-10%}
+.smoke.s2{width:40vw;height:50vh;background:var(--mid);bottom:-10%;right:-5%;animation-delay:-8s}
+.smoke.s3{width:20vw;height:20vh;background:var(--acc);top:30%;left:45%;opacity:.12;animation-delay:-4s}
+@keyframes smoke{to{transform:translate(6vw,-4vh) scale(1.2)}}
+.spark{position:fixed;z-index:1;width:var(--s);height:var(--s);background:var(--acc);pointer-events:none;
+  clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);animation:tw 3s ease-in-out infinite;filter:drop-shadow(0 0 6px var(--acc))}
+@keyframes tw{0%,100%{transform:scale(.3) rotate(0);opacity:.3}50%{transform:scale(1) rotate(90deg);opacity:1}}
+
+/* topo */
+header{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center}
+.tools{display:flex;gap:10px;font:600 .8rem 'Montserrat';color:var(--mut)}
+.tools span{border:1px solid var(--mid);padding:4px 8px;border-radius:6px}
+.idb{background:none;border:1px solid var(--acc);color:var(--w);border-radius:20px;padding:6px 14px;font:600 .75rem 'Montserrat';letter-spacing:2px;transition:.3s}
+.idb:hover{background:var(--acc);box-shadow:0 0 20px var(--acc)}
+
+/* banner principal */
+.banner{position:relative;z-index:2;min-height:0;border-radius:18px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(59,15,34,.95),rgba(13,5,8,.9) 60%,rgba(59,15,34,.8));border:1px solid rgba(255,45,122,.25);
+  box-shadow:0 0 60px rgba(255,45,122,.12);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 clamp(14px,3vw,40px)}
+.banner .side{writing-mode:vertical-rl;font:600 .6rem 'Montserrat';letter-spacing:5px;color:var(--mut);position:absolute;top:50%;transform:translateY(-50%)}
+.banner .side.l{left:14px;transform:translateY(-50%) rotate(180deg)}.banner .side.r{right:14px}
+.big{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;line-height:.82}
+.big h1{font:400 clamp(4rem,20vh,13rem) 'Italiana';color:var(--acc);letter-spacing:.06em;text-shadow:0 0 30px rgba(255,45,122,.6);animation:neon 5s infinite}
+.big h1 span{display:inline-block;animation:sway 3s ease-in-out infinite;animation-delay:calc(var(--i)*.2s)}
+@keyframes sway{50%{transform:translateY(-6px)}}
+.big .ref{font:400 clamp(4rem,20vh,13rem) 'Italiana';letter-spacing:.06em;color:var(--acc);opacity:.35;transform:scaleY(-1);
+  -webkit-mask:linear-gradient(transparent 20%,#000);mask:linear-gradient(transparent 20%,#000)}
+@keyframes neon{0%,18%,22%,25%,53%,57%,100%{opacity:1}20%,24%,55%{opacity:.4}}
+.left,.right{position:relative;z-index:3;display:flex;flex-direction:column;gap:12px}
+.left{padding-left:20px}.right{align-items:flex-end;text-align:right;padding-right:20px}
+.left small{font:600 .65rem 'Montserrat';letter-spacing:4px;color:var(--acc)}
+.left h2{font:400 clamp(1.6rem,4vh,2.4rem) 'Italiana'}
+.left p{font-size:clamp(.72rem,1.6vh,.86rem);line-height:1.6;color:var(--mut);max-width:30ch}
+.me{position:relative;z-index:2;height:min(100%,62vh);align-self:end;display:flex;align-items:flex-end}
+.me img{height:100%;filter:drop-shadow(0 0 30px rgba(255,45,122,.45)) saturate(1.2);transition:transform .4s}
+.me:hover img{transform:scale(1.04)}
+.chips{display:flex;flex-direction:column;gap:8px}
+.chips a{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end;background:rgba(255,45,122,.12);border:1px solid rgba(255,45,122,.35);color:var(--w);
+  text-decoration:none;font:600 .72rem 'Montserrat';letter-spacing:2px;padding:6px 14px;border-radius:8px 0 8px 0;transition:.3s}
+.chips a:hover{background:var(--acc);transform:translateX(-6px);box-shadow:0 0 18px var(--acc)}
+
+/* pedestais dos amigos */
+.friends{position:relative;z-index:3;display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(6px,1.4vw,20px);align-items:end}
+.fr{text-align:center;position:relative;transition:.4s}
+.fr img{width:clamp(44px,8.5vh,80px);aspect-ratio:1;border-radius:50%;background:var(--mid);border:2px solid rgba(255,45,122,.5);position:relative;z-index:1;animation:float 3s ease-in-out infinite;animation-delay:calc(var(--d)*-.6s);transition:.4s}
+@keyframes float{50%{transform:translateY(-8px)}}
+.fr::after{content:"";display:block;width:80%;height:clamp(12px,2.2vh,20px);margin:-8px auto 0;border-radius:50%;background:radial-gradient(ellipse,rgba(255,45,122,.6),rgba(59,15,34,.8) 60%,transparent 72%);transition:.4s}
+.fr b{display:block;font:400 clamp(.9rem,2.2vh,1.25rem) 'Italiana';color:var(--acc);margin-top:4px;transition:.3s}
+.fr:hover img{border-color:var(--acc);box-shadow:0 0 30px var(--acc);transform:translateY(-14px) scale(1.08)}
+.fr:hover::after{filter:brightness(1.8);transform:scaleX(1.2)}
+.fr:hover b{letter-spacing:2px;text-shadow:0 0 10px var(--acc)}
+
+/* player + rodapé */
+.bottom{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.player{display:flex;align-items:center;gap:14px;flex:1;max-width:560px}
+.slash{font:800 1.4rem 'Montserrat';color:var(--acc);letter-spacing:-4px}
+#play{width:42px;height:42px;border-radius:50%;border:1px solid var(--acc);background:var(--mid);color:var(--w);display:grid;place-items:center;flex-shrink:0;transition:.3s}
+#play svg{width:16px;fill:currentColor}
+#play:hover,body.playing #play{background:var(--acc);box-shadow:0 0 20px var(--acc)}
+.tr{flex:1;min-width:0}.tr small{font:800 .65rem 'Montserrat';letter-spacing:3px}
+#song{display:block;font-size:.8rem;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mute{background:none;border:none;color:var(--w);display:grid}#mute svg{width:18px;fill:currentColor}
+input[type=range]{-webkit-appearance:none;appearance:none;width:90px;height:3px;background:linear-gradient(90deg,var(--acc) var(--v),var(--mid) var(--v))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:var(--acc);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:0;background:var(--acc)}
+footer{font:400 .75rem 'Montserrat';color:var(--mut);letter-spacing:2px}
+footer a{color:var(--acc);font:400 1.1rem 'Italiana';text-decoration:none;font-weight:700}
+footer a:hover{text-shadow:0 0 12px var(--acc)}
+
+/* cursor estrela */
+.cur{position:fixed;width:22px;height:22px;margin:-11px;background:var(--acc);pointer-events:none;z-index:99;filter:drop-shadow(0 0 8px var(--acc));
+  clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);transition:transform .3s}
+.cur.hov{transform:scale(1.8) rotate(45deg)}
+.tr-s{position:fixed;width:10px;height:10px;margin:-5px;background:var(--acc);pointer-events:none;z-index:98;
+  clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);animation:fade .9s forwards}
+@keyframes fade{to{transform:translateY(16px) scale(0) rotate(180deg);opacity:0}}
+@media(hover:none){.cur{display:none}}
+
+#enter{position:fixed;inset:0;z-index:90;background:var(--base);display:grid;place-items:center;transition:.9s}
+#enter p{font:400 clamp(3rem,10vw,7rem) 'Italiana';color:var(--acc);text-shadow:0 0 30px var(--acc);animation:neon 3s infinite}
+#enter small{display:block;text-align:center;letter-spacing:6px;font-size:.7rem;color:var(--mut)}
+#enter.hide{opacity:0;pointer-events:none}
+#toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-80px);background:var(--acc);color:var(--w);padding:8px 18px;border-radius:20px;z-index:95;transition:.4s;font-weight:600;font-size:.8rem}
+#toast.show{transform:translate(-50%,0)}
+
+@media(max-width:860px){
+  .banner{grid-template-columns:1fr auto;padding:10px}.right,.banner .side,.tools{display:none}
+  .left p,.left small{display:none}.left{padding:0}.big h1,.big .ref{font-size:4.2rem}
+  .me{height:34vh}.bottom{flex-direction:column;gap:6px}input[type=range]{display:none}
+}
+</style>
+</head>
+<body>
+<div class="smoke s1"></div><div class="smoke s2"></div><div class="smoke s3"></div>
+<div id="enter"><div><p>Mira</p><small>✦ CLIQUE PARA ENTRAR ✦</small></div></div>
+<div id="toast">ID copiado ✦</div>
+<div class="cur" id="cur"></div>
+
+<header>
+  <div class="tools"><span>Ae</span><span>Ps</span><span>Fg</span></div>
+  <button class="idb" data-copy="#MRA-1402">ID #MRA-1402</button>
+</header>
+
+<section class="banner">
+  <span class="side l">M I R A · R O S E</span><span class="side r">S T R E A M · O N</span>
+  <div class="big"><h1 data-split>MIRA</h1><div class="ref">MIRA</div></div>
+  <div class="left">
+    <small>STREAMER · ARTISTA</small>
+    <h2>Mira Rose</h2>
+    <p>Faço lives de desenho de madrugada, coleciono plantas que não sei cuidar e transformo cada stream num pequeno show em rosa neon. Bem-vindo ao meu cantinho.</p>
+  </div>
+  <div class="me"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=MiraRose" alt="Mira"></div>
+  <div class="right">
+    <div class="chips"><a href="#">TWITCH ✦</a><a href="#">INSTAGRAM ✦</a><a href="#">DISCORD ✦</a><a href="#">TIKTOK ✦</a></div>
+  </div>
+</section>
+
+<section class="friends">
+  <div class="fr" style="--d:0"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=Sasha" alt=""><b>Sasha</b></div>
+  <div class="fr" style="--d:1"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=Valen" alt=""><b>Valen</b></div>
+  <div class="fr" style="--d:2"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=Noor" alt=""><b>Noor</b></div>
+  <div class="fr" style="--d:3"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=Kiki" alt=""><b>Kiki</b></div>
+  <div class="fr" style="--d:4"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=Elle" alt=""><b>Elle</b></div>
+</section>
+
+<div class="bottom">
+  <div class="player">
+    <span class="slash">///</span>
+    <button id="play"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="tr"><small>TOCANDO</small><span id="song"></span></div>
+    <button id="mute"><svg id="vico" viewBox="0 0 24 24"></svg></button>
+    <input type="range" id="volume" min="0" max="100">
+  </div>
+  <footer>Feito por <a href="https://xat.com/rav" target="_blank" rel="noopener">Zark</a></footer>
+</div>
+
+<script>
+const MUSIC = { id:"jfKfPfyJRdk", title:"", volume:50 };
+
+/* estrelinhas */
+for(let i=0;i<22;i++){const s=document.createElement('div');s.className='spark';
+  s.style.cssText=`--s:${6+Math.random()*14}px;left:${Math.random()*100}vw;top:${Math.random()*100}vh;animation-delay:-${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+  document.body.appendChild(s);}
+
+/* cursor estrela com rastro */
+const cur=document.getElementById('cur');let t=0;
+addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  if(Date.now()-t>45){t=Date.now();const d=document.createElement('div');d.className='tr-s';d.style.left=e.clientX+(Math.random()-.5)*14+'px';d.style.top=e.clientY+(Math.random()-.5)*14+'px';
+    document.body.appendChild(d);setTimeout(()=>d.remove(),900)}});
+document.querySelectorAll('button,a,.fr,.me').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hov'));el.addEventListener('mouseleave',()=>cur.classList.remove('hov'))});
+</script>
+<script>/* ===== Player YouTube (só áudio) + utilidades ===== */
+(function(){
+  const PREVIEW = /[?&]preview/.test(location.search);
+  if (PREVIEW) { const e=document.getElementById('enter'); if(e) e.remove(); }
+  const $ = id => document.getElementById(id);
+  const M = window.MUSIC || {};
+  const I_PLAY  = '<path d="M8 5v14l11-7z"/>';
+  const I_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  const V_ON  = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/>';
+  const V_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.4-2.4-1.4-1.4-2.4 2.4-2.4-2.4-1.4 1.4 2.4 2.4-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4z"/>';
+
+  /* separa letras para animar: <h1 data-split>Nome</h1> */
+  document.querySelectorAll('[data-split]').forEach(el => {
+    el.innerHTML = [...el.textContent].map((c,i) =>
+      c === ' ' ? '<span class="sp">&nbsp;</span>' : `<span style="--i:${i}">${c}</span>`).join('');
+  });
+
+  /* copiar ID: <button data-copy="#ID"> */
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard && navigator.clipboard.writeText(b.dataset.copy);
+    const t = $('toast'); if (!t) return;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600);
+  }));
+
+  /* iframe escondido */
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:200px;height:200px;opacity:0;pointer-events:none';
+  holder.innerHTML = '<div id="yt"></div>';
+  document.body.appendChild(holder);
+
+  let yt, ready = false, playing = false, want = false;
+  const song = $('song');
+  if (song) song.textContent = M.title || 'Clique em play';
+
+  window.onYouTubeIframeAPIReady = () => {
+    yt = new YT.Player('yt', {
+      videoId: M.id,
+      playerVars: { autoplay:0, controls:0, loop:1, playlist:M.id, playsinline:1 },
+      events: {
+        onReady: () => { ready = true; yt.setVolume(M.volume ?? 50); if (want) yt.playVideo(); },
+        onStateChange: e => {
+          playing = e.data === YT.PlayerState.PLAYING;
+          document.body.classList.toggle('playing', playing);
+          const i = $('ico'); if (i) i.innerHTML = playing ? I_PAUSE : I_PLAY;
+          if (playing && !M.title && song) { const t = yt.getVideoData().title; if (t) song.textContent = t; }
+        }
+      }
+    });
+  };
+  const s = document.createElement('script');
+  if (!PREVIEW) s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+
+  const play = () => { want = true; if (ready) yt.playVideo(); };
+  const pb = $('play');
+  if (pb) pb.addEventListener('click', e => { e.stopPropagation(); if (!ready) return play(); playing ? yt.pauseVideo() : yt.playVideo(); });
+
+  const seek = d => { if (ready) yt.seekTo(Math.max(0, yt.getCurrentTime() + d), true); };
+  $('prev') && $('prev').addEventListener('click', e => { e.stopPropagation(); seek(-10); });
+  $('next') && $('next').addEventListener('click', e => { e.stopPropagation(); seek(10); });
+
+  const v = $('volume');
+  if (v) {
+    v.value = M.volume ?? 50;
+    const upd = () => {
+      v.style.setProperty('--v', v.value + '%');
+      if (ready) { yt.setVolume(+v.value); yt.unMute(); }
+      const vi = $('vico'); if (vi) vi.innerHTML = +v.value === 0 ? V_OFF : V_ON;
+    };
+    v.addEventListener('input', upd); upd();
+    let last = v.value;
+    $('mute') && $('mute').addEventListener('click', e => {
+      e.stopPropagation();
+      if (+v.value > 0) { last = v.value; v.value = 0; } else v.value = last || 50;
+      upd();
+    });
+  }
+
+  /* tela de entrada: o clique libera o som */
+  const en = $('enter');
+  if (en) en.addEventListener('click', () => { en.classList.add('hide'); play(); });
+})();
+</script>
+</body>
+</html>

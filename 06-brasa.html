@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renji Kazama · Brasa</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Kaushan+Script&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* 60% #0c0b0d carvão | 30% #2b2320 cinza-brasa | 10% #ffad0d chama | #f4efe8 | #9b8f85 */
+:root{--base:#0c0b0d;--mid:#2b2320;--acc:#ffad0d;--w:#f4efe8;--mut:#9b8f85}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Poppins',sans-serif;background:var(--base);color:var(--w);height:100dvh;position:relative;
+  display:grid;grid-template-columns:auto 1fr 1fr;grid-template-rows:1fr auto;gap:clamp(12px,2.4vw,36px);padding:clamp(14px,3vh,32px) clamp(14px,3vw,44px) 10px}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 75% 60%,rgba(255,173,13,.22),transparent 55%),radial-gradient(ellipse at 10% 100%,rgba(43,35,32,.9),transparent 60%);z-index:0}
+@media(hover:hover){*{cursor:none!important}}
+canvas{position:fixed;inset:0;z-index:1;pointer-events:none}
+.flash{position:fixed;inset:0;background:var(--acc);opacity:0;z-index:1;pointer-events:none;mix-blend-mode:overlay}
+.flash.on{animation:flash .5s}
+@keyframes flash{10%,30%{opacity:.35}20%,40%{opacity:0}}
+
+/* faixa de amigos */
+.strip{position:relative;z-index:2;display:flex;flex-direction:column;gap:8px;width:clamp(150px,17vw,240px);min-height:0}
+.strip h3{font:400 .7rem 'Poppins';letter-spacing:4px;color:var(--mut);display:flex;justify-content:space-between}
+.strip h3 b{color:var(--acc)}
+.fc{flex:1;position:relative;overflow:hidden;border-radius:6px;background:var(--mid);transition:flex .5s cubic-bezier(.2,.8,.2,1);min-height:0;border:1px solid rgba(255,173,13,.12)}
+.fc img{position:absolute;right:-10%;top:50%;transform:translateY(-50%);height:160%;filter:grayscale(1) brightness(.6);transition:.5s}
+.fc span{position:absolute;left:12px;bottom:8px;font:400 1.1rem 'Anton';letter-spacing:1px;text-transform:uppercase;z-index:1}
+.fc small{position:absolute;left:12px;top:8px;font-size:.6rem;color:var(--acc);letter-spacing:2px;opacity:0;transition:.4s}
+.fc::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--base),transparent 70%)}
+.fc:hover{flex:2.6;border-color:var(--acc)}
+.fc:hover img{filter:none;transform:translateY(-50%) scale(1.08)}
+.fc:hover small{opacity:1}
+
+/* texto */
+.info{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,2vh,18px);min-height:0}
+.tag{display:flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:4px;color:var(--mut)}
+.tag::before{content:"";width:40px;height:2px;background:var(--acc)}
+.name{position:relative;line-height:.85}
+.name h1{font:400 clamp(3rem,min(7vw,14vh),9rem) 'Anton';white-space:nowrap;text-transform:uppercase;color:var(--w);border-left:6px solid var(--acc);padding-left:16px;
+  text-shadow:0 0 0 transparent;animation:burn 3s ease-in-out infinite}
+.name h1 span{display:inline-block;animation:rise .8s cubic-bezier(.2,1.4,.4,1) both;animation-delay:calc(var(--i)*.07s)}
+@keyframes rise{from{transform:translateY(80%);opacity:0;color:var(--acc)}}
+@keyframes burn{0%,100%{text-shadow:0 0 18px rgba(255,173,13,.35)}50%{text-shadow:0 0 40px rgba(255,173,13,.7),0 -6px 30px rgba(255,173,13,.3)}}
+.name em{position:absolute;right:8%;bottom:-.3em;font:400 clamp(2rem,6vh,3.6rem) 'Kaushan Script';color:var(--acc);font-style:normal;transform:rotate(-8deg);animation:flick 4s infinite}
+@keyframes flick{0%,92%,100%{opacity:1}93%,97%{opacity:.3}95%{opacity:1}}
+.bio{max-width:48ch;font-size:clamp(.74rem,1.7vh,.9rem);line-height:1.7;color:#cfc6bd}
+.id{display:flex;align-items:center;gap:12px;font-size:.8rem;color:var(--mut)}
+.id b{color:var(--w);letter-spacing:2px}
+.btn{position:relative;overflow:hidden;background:var(--acc);color:var(--base);border:none;padding:10px 22px;font:600 .75rem 'Poppins';letter-spacing:2px;transform:skewX(-12deg);transition:.3s}
+.btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:rgba(255,255,255,.6);transform:skewX(-20deg);transition:.5s}
+.btn:hover::after{left:120%}
+.btn:hover{box-shadow:0 0 24px var(--acc)}
+.btn.ghost{background:none;color:var(--w);border:1px solid var(--acc)}
+
+/* herói + player circular */
+.hero{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:center;min-height:0}
+.hero img{position:relative;height:100%;max-height:80vh;filter:drop-shadow(0 0 30px rgba(255,173,13,.35)) sepia(.2);animation:breath 5s ease-in-out infinite;z-index:1}
+@keyframes breath{50%{transform:translateY(-8px) scale(1.01)}}
+.hero::before{content:"";position:absolute;width:70%;aspect-ratio:1;border-radius:50%;bottom:10%;border:2px solid var(--acc);opacity:.4;animation:pulse 3s ease-out infinite}
+@keyframes pulse{from{transform:scale(.8);opacity:.6}to{transform:scale(1.2);opacity:0}}
+.player{position:absolute;left:0;bottom:4%;z-index:3;display:flex;align-items:center;gap:14px;background:rgba(43,35,32,.85);backdrop-filter:blur(8px);
+  padding:10px 16px 10px 10px;border-radius:60px;border:1px solid rgba(255,173,13,.3);max-width:90%}
+#play{position:relative;width:58px;height:58px;border-radius:50%;border:none;background:var(--acc);color:var(--base);display:grid;place-items:center;flex-shrink:0}
+#play svg{width:22px;fill:currentColor}
+#play::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px dashed var(--acc);animation:spin 8s linear infinite paused}
+body.playing #play::before{animation-play-state:running}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tr{min-width:0}.tr small{font-size:.6rem;letter-spacing:3px;color:var(--acc)}
+#song{display:block;font:400 1rem 'Anton';letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:26ch}
+.vol{display:flex;align-items:center;gap:6px}
+.vol button{background:none;border:none;color:var(--w);display:grid}.vol svg{width:18px;fill:currentColor}
+input[type=range]{-webkit-appearance:none;appearance:none;width:80px;height:3px;background:linear-gradient(90deg,var(--acc) var(--v),#555 var(--v))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:var(--acc);transform:rotate(45deg)}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:0;background:var(--acc)}
+
+footer{grid-column:1/-1;position:relative;z-index:2;display:flex;justify-content:space-between;font-size:.7rem;color:var(--mut);letter-spacing:2px}
+footer a{color:var(--acc);text-decoration:none;font-weight:600}
+footer a:hover{text-shadow:0 0 10px var(--acc)}
+
+/* cursor: losango de brasa */
+.cur{position:fixed;width:14px;height:14px;margin:-7px;background:var(--acc);transform:rotate(45deg);pointer-events:none;z-index:99;box-shadow:0 0 16px var(--acc);transition:width .2s,height .2s,margin .2s}
+.cur.hov{width:26px;height:26px;margin:-13px;background:transparent;border:2px solid var(--acc)}
+@media(hover:none){.cur{display:none}}
+
+#enter{position:fixed;inset:0;z-index:90;background:var(--base);display:grid;place-items:center;transition:1s}
+#enter p{font:400 clamp(2rem,6vw,4rem) 'Anton';letter-spacing:.1em;animation:burn 2s infinite}
+#enter small{display:block;text-align:center;font:400 .7rem 'Poppins';letter-spacing:6px;color:var(--acc)}
+#enter.hide{opacity:0;pointer-events:none}
+#toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-80px);background:var(--acc);color:var(--base);padding:8px 18px;z-index:95;transition:.4s;font-weight:600;font-size:.8rem}
+#toast.show{transform:translate(-50%,0)}
+
+@media(max-width:860px){
+  body{grid-template-columns:1fr;grid-template-rows:auto auto 1fr auto}
+  .strip{width:100%;flex-direction:row;height:70px}.strip h3{display:none}
+  .fc span{font-size:.7rem}.fc:hover{flex:1.6}
+  .name h1{font-size:3.4rem}.name em{font-size:1.8rem}.bio{font-size:.72rem}
+  .hero img{max-height:40vh}.vol input{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas><div class="flash" id="flash"></div>
+<div id="enter"><div><p>RENJI KAZAMA</p><small>CLIQUE PARA ACENDER</small></div></div>
+<div id="toast">ID copiado 🔥</div>
+<div class="cur" id="cur"></div>
+
+<aside class="strip">
+  <h3>ALIADOS <b>05</b></h3>
+  <div class="fc"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Akira" alt=""><small>ESPADACHIM</small><span>Akira</span></div>
+  <div class="fc"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Hotaru" alt=""><small>ARQUEIRA</small><span>Hotaru</span></div>
+  <div class="fc"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Genji" alt=""><small>MONGE</small><span>Genji</span></div>
+  <div class="fc"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Suzume" alt=""><small>NINJA</small><span>Suzume</span></div>
+  <div class="fc"><img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Tetsu" alt=""><small>FERREIRO</small><span>Tetsu</span></div>
+</aside>
+
+<section class="info">
+  <div class="tag">PORTFÓLIO · ILUSTRADOR</div>
+  <div class="name"><h1 data-split>KAZAMA</h1><em>Renji</em></div>
+  <p class="bio">Renji Kazama é um ilustrador que desenha batalhas como quem escreve poesia. Cresceu entre mangás antigos e ferreiros de espadas, e hoje transforma fogo, vento e aço em artes cheias de movimento. Cada traço é uma promessa de nunca desistir.</p>
+  <div class="id">ID <b>#RNJ-0451</b></div>
+  <div style="display:flex;gap:14px">
+    <button class="btn" data-copy="#RNJ-0451">COPIAR ID</button>
+    <button class="btn ghost" onclick="strike()">INVOCAR RAIO ⚡</button>
+  </div>
+</section>
+
+<section class="hero">
+  <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=RenjiKazama" alt="Renji">
+  <div class="player">
+    <button id="play"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="tr"><small>TRILHA SONORA</small><span id="song"></span></div>
+    <div class="vol"><button id="mute"><svg id="vico" viewBox="0 0 24 24"></svg></button><input type="range" id="volume" min="0" max="100"></div>
+  </div>
+</section>
+
+<footer><span>炎 · KAZAMA ART</span><span>Feito por <a href="https://xat.com/rav" target="_blank" rel="noopener">Zark</a></span></footer>
+
+<script>
+const MUSIC = { id:"jfKfPfyJRdk", title:"", volume:50 };
+
+/* brasas subindo + rastro do cursor */
+const cv=document.getElementById('fx'),c=cv.getContext('2d');let W,H,E=[];
+const rs=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};rs();addEventListener('resize',rs);
+const spawn=(x,y,v)=>E.push({x,y,vx:(Math.random()-.5)*v,vy:-Math.random()*v-.5,l:1,s:1+Math.random()*2.5});
+setInterval(()=>spawn(Math.random()*W,H+10,2),60);
+(function loop(){c.clearRect(0,0,W,H);c.globalCompositeOperation='lighter';
+  E=E.filter(p=>(p.l-=.006)>0);
+  for(const p of E){p.x+=p.vx+Math.sin(p.y*.02)*.4;p.y+=p.vy;c.fillStyle=`rgba(255,${120+Math.random()*80|0},13,${p.l})`;
+    c.beginPath();c.arc(p.x,p.y,p.s,0,7);c.fill();}
+  requestAnimationFrame(loop)})();
+
+const cur=document.getElementById('cur');
+addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';for(let i=0;i<2;i++)spawn(e.clientX,e.clientY,1.5)});
+document.querySelectorAll('button,a,.fc').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hov'));el.addEventListener('mouseleave',()=>cur.classList.remove('hov'))});
+
+/* raio */
+const fl=document.getElementById('flash');
+function strike(){fl.classList.remove('on');void fl.offsetWidth;fl.classList.add('on');for(let i=0;i<80;i++)spawn(W*.75,H*.5,6)}
+setInterval(()=>Math.random()<.35&&strike(),7000);
+</script>
+<script>/* ===== Player YouTube (só áudio) + utilidades ===== */
+(function(){
+  const PREVIEW = /[?&]preview/.test(location.search);
+  if (PREVIEW) { const e=document.getElementById('enter'); if(e) e.remove(); }
+  const $ = id => document.getElementById(id);
+  const M = window.MUSIC || {};
+  const I_PLAY  = '<path d="M8 5v14l11-7z"/>';
+  const I_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  const V_ON  = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/>';
+  const V_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.4-2.4-1.4-1.4-2.4 2.4-2.4-2.4-1.4 1.4 2.4 2.4-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4z"/>';
+
+  /* separa letras para animar: <h1 data-split>Nome</h1> */
+  document.querySelectorAll('[data-split]').forEach(el => {
+    el.innerHTML = [...el.textContent].map((c,i) =>
+      c === ' ' ? '<span class="sp">&nbsp;</span>' : `<span style="--i:${i}">${c}</span>`).join('');
+  });
+
+  /* copiar ID: <button data-copy="#ID"> */
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard && navigator.clipboard.writeText(b.dataset.copy);
+    const t = $('toast'); if (!t) return;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600);
+  }));
+
+  /* iframe escondido */
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:200px;height:200px;opacity:0;pointer-events:none';
+  holder.innerHTML = '<div id="yt"></div>';
+  document.body.appendChild(holder);
+
+  let yt, ready = false, playing = false, want = false;
+  const song = $('song');
+  if (song) song.textContent = M.title || 'Clique em play';
+
+  window.onYouTubeIframeAPIReady = () => {
+    yt = new YT.Player('yt', {
+      videoId: M.id,
+      playerVars: { autoplay:0, controls:0, loop:1, playlist:M.id, playsinline:1 },
+      events: {
+        onReady: () => { ready = true; yt.setVolume(M.volume ?? 50); if (want) yt.playVideo(); },
+        onStateChange: e => {
+          playing = e.data === YT.PlayerState.PLAYING;
+          document.body.classList.toggle('playing', playing);
+          const i = $('ico'); if (i) i.innerHTML = playing ? I_PAUSE : I_PLAY;
+          if (playing && !M.title && song) { const t = yt.getVideoData().title; if (t) song.textContent = t; }
+        }
+      }
+    });
+  };
+  const s = document.createElement('script');
+  if (!PREVIEW) s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+
+  const play = () => { want = true; if (ready) yt.playVideo(); };
+  const pb = $('play');
+  if (pb) pb.addEventListener('click', e => { e.stopPropagation(); if (!ready) return play(); playing ? yt.pauseVideo() : yt.playVideo(); });
+
+  const seek = d => { if (ready) yt.seekTo(Math.max(0, yt.getCurrentTime() + d), true); };
+  $('prev') && $('prev').addEventListener('click', e => { e.stopPropagation(); seek(-10); });
+  $('next') && $('next').addEventListener('click', e => { e.stopPropagation(); seek(10); });
+
+  const v = $('volume');
+  if (v) {
+    v.value = M.volume ?? 50;
+    const upd = () => {
+      v.style.setProperty('--v', v.value + '%');
+      if (ready) { yt.setVolume(+v.value); yt.unMute(); }
+      const vi = $('vico'); if (vi) vi.innerHTML = +v.value === 0 ? V_OFF : V_ON;
+    };
+    v.addEventListener('input', upd); upd();
+    let last = v.value;
+    $('mute') && $('mute').addEventListener('click', e => {
+      e.stopPropagation();
+      if (+v.value > 0) { last = v.value; v.value = 0; } else v.value = last || 50;
+      upd();
+    });
+  }
+
+  /* tela de entrada: o clique libera o som */
+  const en = $('enter');
+  if (en) en.addEventListener('click', () => { en.classList.add('hide'); play(); });
+})();
+</script>
+</body>
+</html>

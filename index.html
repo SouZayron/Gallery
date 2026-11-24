@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zark · Modelos de Portfólio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* 60% #0b0b14 noite | 30% #181828 ardósia | 10% #8b6cff lavanda | #f1f0ff | #8d8aa8 */
+:root{--base:#0b0b14;--mid:#181828;--acc:#8b6cff;--w:#f1f0ff;--mut:#8d8aa8}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Inter',sans-serif;background:var(--base);color:var(--w);min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden}
+@media(hover:hover){*{cursor:none!important}}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(700px circle at var(--x,50%) var(--y,0%),rgba(139,108,255,.14),transparent 60%),
+  linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px) 0 0/48px 48px}
+
+/* ---------- topo ---------- */
+header{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:clamp(18px,3.4vh,36px) clamp(16px,4vw,56px) clamp(10px,2vh,20px)}
+.kick{font:600 .72rem 'Inter';letter-spacing:4px;color:var(--acc);display:flex;align-items:center;gap:10px}
+.kick::before{content:"";width:26px;height:2px;background:var(--acc)}
+h1{font:800 clamp(1.8rem,5vh,3.4rem)/1 'Syne';letter-spacing:-.02em;margin-top:8px}
+h1 span{display:inline-block;background:linear-gradient(90deg,var(--w),var(--acc),var(--w)) 0 0/200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 6s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.meta{text-align:right;color:var(--mut);font-size:.82rem;line-height:1.6}
+.meta b{color:var(--w);font:800 1.6rem 'Syne';display:block;line-height:1}
+
+/* ---------- grade ---------- */
+main{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:repeat(5,1fr);align-content:center;gap:clamp(10px,1.4vw,20px);padding:0 clamp(16px,4vw,56px);min-height:0}
+.card{position:relative;display:flex;flex-direction:column;background:var(--mid);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden;
+  transition:transform .4s cubic-bezier(.2,.9,.2,1),border-color .3s,box-shadow .4s;opacity:0;animation:in .7s forwards;animation-delay:calc(var(--i)*.06s)}
+@keyframes in{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-6px);border-color:var(--c,var(--acc));box-shadow:0 18px 40px -12px var(--c,var(--acc))}
+.thumb{position:relative;aspect-ratio:16/10;overflow:hidden;background:#000}
+.thumb iframe{position:absolute;left:0;top:0;width:1440px;height:900px;border:0;transform-origin:0 0;pointer-events:none}
+.thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(11,11,20,.85));transition:.3s}
+.num{position:absolute;top:10px;left:10px;z-index:2;font:800 .75rem 'Syne';background:rgba(11,11,20,.75);backdrop-filter:blur(6px);padding:4px 9px;border-radius:20px}
+.over{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:.3s;background:rgba(11,11,20,.45);backdrop-filter:blur(2px)}
+.card:hover .over{opacity:1}
+.over button,.over a{border:none;border-radius:30px;padding:8px 14px;font:600 .75rem 'Inter';text-decoration:none;transform:translateY(10px);transition:.3s}
+.card:hover .over button,.card:hover .over a{transform:none}
+.over button{background:var(--w);color:var(--base)}
+.over a{background:rgba(255,255,255,.12);color:var(--w);border:1px solid rgba(255,255,255,.3);transition-delay:.05s}
+.over button:hover{background:var(--c,var(--acc));color:var(--w)}
+.over a:hover{background:var(--w);color:var(--base)}
+.info{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.info b{font:600 .9rem 'Syne';white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info small{display:block;color:var(--mut);font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pal{display:flex;flex-shrink:0}
+.pal i{width:14px;height:14px;border-radius:50%;border:2px solid var(--mid);margin-left:-5px;transition:.3s}
+.card:hover .pal i{margin-left:2px}
+
+footer{position:relative;z-index:2;text-align:center;padding:clamp(10px,2vh,18px);font-size:.78rem;color:var(--mut);letter-spacing:1px}
+footer a{color:var(--acc);font-weight:600;text-decoration:none;background:linear-gradient(var(--acc),var(--acc)) 0 100%/0 1px no-repeat;transition:.3s}
+footer a:hover{background-size:100% 1px}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(11,11,20,.85);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:.4s}
+.modal.open{opacity:1;pointer-events:auto}
+.win{width:min(94vw,1500px);height:min(88vh,940px);display:flex;flex-direction:column;background:var(--mid);border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;transform:scale(.94);transition:.4s cubic-bezier(.2,.9,.2,1)}
+.modal.open .win{transform:none}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.dots{display:flex;gap:6px}.dots i{width:11px;height:11px;border-radius:50%;background:#2b2b40}.dots i:first-child{background:var(--acc)}
+.url{flex:1;min-width:0;background:var(--base);border-radius:8px;padding:6px 12px;font-size:.75rem;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar a,.bar button{background:none;border:1px solid rgba(255,255,255,.15);color:var(--w);border-radius:8px;padding:6px 12px;font:500 .75rem 'Inter';text-decoration:none;transition:.2s}
+.bar a:hover,.bar button:hover{background:var(--w);color:var(--base)}
+.dev{display:flex;gap:4px}.dev button.on{background:var(--acc);border-color:var(--acc);color:var(--w)}
+.screen{flex:1;display:grid;place-items:center;background:#000;min-height:0}
+.screen iframe{width:100%;height:100%;border:0;transition:width .4s}
+.screen.mobile iframe{width:390px;max-width:100%;border-inline:1px solid #222}
+
+/* ---------- cursor ---------- */
+.cur{position:fixed;left:0;top:0;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--acc);pointer-events:none;z-index:99;transition:width .25s,height .25s,margin .25s,background .25s}
+.cur.hov{width:54px;height:54px;margin:-27px;background:rgba(139,108,255,.18);border:1px solid var(--acc)}
+.cur span{position:absolute;inset:0;display:grid;place-items:center;font:600 .6rem 'Inter';color:var(--w);opacity:0;transition:.2s}
+.cur.hov.lbl span{opacity:1}
+@media(hover:none){.cur{display:none}.over{opacity:1;background:none;align-items:flex-end;padding-bottom:10px}.over button,.over a{transform:none}}
+
+/* ---------- responsivo ---------- */
+@media(max-width:1100px){main{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){main{grid-template-columns:1fr 1fr}.meta{display:none}.dev{display:none}}
+</style>
+</head>
+<body>
+<div class="cur" id="cur"><span>VER</span></div>
+
+<header>
+  <div>
+    <div class="kick">COLEÇÃO 2026</div>
+    <h1>Modelos de <span>Portfólio</span></h1>
+  </div>
+  <div class="meta"><b>10</b>modelos one page · HTML + CSS + JS<br>com player de música integrado</div>
+</header>
+
+<main id="grid"></main>
+
+<footer>Feito por <a href="https://xat.com/rav" target="_blank" rel="noopener">Zark</a></footer>
+
+<div class="modal" id="modal">
+  <div class="win">
+    <div class="bar">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="url" id="url"></div>
+      <div class="dev"><button class="on" data-d="desk">Desktop</button><button data-d="mobile">Celular</button></div>
+      <a id="newtab" href="#" target="_blank" rel="noopener">Abrir ↗</a>
+      <button id="close">Fechar ✕</button>
+    </div>
+    <div class="screen" id="screen"><iframe id="live" title="Prévia"></iframe></div>
+  </div>
+</div>
+
+<script>
+/* ===== Lista de modelos (pasta, nome, descrição, paleta) ===== */
+const MODELOS = [
+  { dir:"01-azul",    nome:"Azul Céu",  desc:"Yumi Aozora · ilustradora", cores:["#0b1a2e","#1d4e7a","#5ce1e6"] },
+  { dir:"02-oceano",  nome:"Oceano",    desc:"Nami Shiori · VTuber",      cores:["#d6ebfa","#2f6fa0","#ff7aa6"] },
+  { dir:"03-mono",    nome:"Mono",      desc:"Kaito Ren · criador",       cores:["#e8eaed","#24272c","#c8ff2e"] },
+  { dir:"04-washi",   nome:"Washi",     desc:"Hikaru Morimoto · designer",cores:["#ebe6dd","#161616","#c4122f"] },
+  { dir:"05-violeta", nome:"Violeta",   desc:"Luna · cantora",            cores:["#2a0b3e","#7a2bb0","#ff5ad9"] },
+  { dir:"06-brasa",   nome:"Brasa",     desc:"Renji Kazama · ilustrador", cores:["#0c0b0d","#2b2320","#ffad0d"] },
+  { dir:"07-arena",   nome:"Arena",     desc:"VEXOR · pro player",        cores:["#111317","#23272e","#ffd60a"] },
+  { dir:"08-agencia", nome:"Agência",   desc:"Lucas Ventura · diretor",   cores:["#040b1f","#0d3a8c","#ffc21a"] },
+  { dir:"09-cyber",   nome:"Cyber HUD", desc:"Neo Kira · UI designer",    cores:["#031118","#0c4a58","#55f5ff"] },
+  { dir:"10-rosa",    nome:"Rosa Neon", desc:"Mira Rose · streamer",      cores:["#0d0508","#3b0f22","#ff2d7a"] }
+];
+
+const grid = document.getElementById('grid');
+grid.innerHTML = MODELOS.map((m,i) => `
+  <article class="card" style="--i:${i};--c:${m.cores[2]}">
+    <div class="thumb">
+      <iframe src="${m.dir}.html?preview" loading="lazy" tabindex="-1" title="${m.nome}"></iframe>
+      <span class="num">${String(i+1).padStart(2,'0')}</span>
+      <div class="over">
+        <button data-open="${i}">Visualizar</button>
+        <a href="${m.dir}.html" target="_blank" rel="noopener">Nova aba ↗</a>
+      </div>
+    </div>
+    <div class="info">
+      <div style="min-width:0"><b>${m.nome}</b><small>${m.desc}</small></div>
+      <div class="pal">${m.cores.map(c=>`<i style="background:${c}"></i>`).join('')}</div>
+    </div>
+  </article>`).join('');
+
+/* escala as miniaturas para caber no card */
+const ro = new ResizeObserver(es => es.forEach(e => {
+  const f = e.target.querySelector('iframe'), w = e.contentRect.width, h = e.contentRect.height;
+  f.style.transform = `scale(${w/1440})`;
+}));
+document.querySelectorAll('.thumb').forEach(t => ro.observe(t));
+
+/* modal com prévia ao vivo */
+const modal = document.getElementById('modal'), live = document.getElementById('live'), screen = document.getElementById('screen');
+function abrir(i){
+  const m = MODELOS[i], url = `${m.dir}.html`;
+  live.src = url;
+  document.getElementById('newtab').href = url;
+  document.getElementById('url').textContent = location.host + location.pathname.replace(/index\.html$/,'') + url;
+  modal.classList.add('open');
+}
+function fechar(){ modal.classList.remove('open'); setTimeout(() => live.src = 'about:blank', 400); }
+grid.addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) abrir(+b.dataset.open); });
+document.querySelectorAll('.card .thumb').forEach((t,i) => t.addEventListener('dblclick', () => abrir(i)));
+document.getElementById('close').onclick = fechar;
+modal.addEventListener('click', e => { if (e.target === modal) fechar(); });
+addEventListener('keydown', e => { if (e.key === 'Escape') fechar(); });
+document.querySelectorAll('.dev button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.dev button').forEach(x => x.classList.toggle('on', x === b));
+  screen.classList.toggle('mobile', b.dataset.d === 'mobile');
+});
+
+/* cursor + luz de fundo */
+const cur = document.getElementById('cur');
+addEventListener('mousemove', e => {
+  cur.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+  document.body.style.setProperty('--x', e.clientX+'px'); document.body.style.setProperty('--y', e.clientY+'px');
+});
+document.addEventListener('mouseover', e => {
+  const t = e.target.closest('button,a,.card');
+  cur.classList.toggle('hov', !!t);
+  cur.classList.toggle('lbl', !!t && t.classList.contains('card'));
+});
+/* o cursor some quando o mouse entra no iframe do modal */
+live.addEventListener('mouseenter', () => cur.style.opacity = 0);
+live.addEventListener('mouseleave', () => cur.style.opacity = 1);
+</script>
+</body>
+</html>

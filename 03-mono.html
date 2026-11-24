@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAITO · Mono</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* 60% #e8eaed névoa | 30% #24272c grafite | 10% #c8ff2e lima | texto #111316 | cinza #8a9099 */
+:root{--base:#e8eaed;--mid:#24272c;--acc:#c8ff2e;--ink:#111316;--mut:#8a9099}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Space Grotesk',sans-serif;background:var(--base);color:var(--ink);height:100dvh;position:relative;
+  display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto 1fr auto auto;gap:clamp(8px,1.6vh,16px);padding:clamp(12px,2.4vh,26px) clamp(14px,3vw,40px)}
+@media(hover:hover){*{cursor:none!important}}
+
+/* circuitos */
+svg.circuit{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+svg.circuit path{fill:none;stroke:#c9cdd3;stroke-width:1.5;stroke-dasharray:6 10;animation:flow 14s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-320}}
+.dots{position:fixed;z-index:0;width:120px;height:60px;background-image:radial-gradient(var(--mut) 1.5px,transparent 1.5px);background-size:14px 14px;opacity:.5}
+
+/* topo */
+.top{grid-column:1/-1;display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2}
+.badge{background:var(--mid);color:var(--base);font:600 .9rem 'JetBrains Mono';padding:8px 12px;border-radius:10px;line-height:1.1}
+.badge b{color:var(--acc);display:block}
+.sub{font:600 .7rem 'JetBrains Mono';letter-spacing:2px;color:var(--mut);text-align:center}
+.sub b{color:var(--ink)}
+.ver{border:1.5px solid var(--mid);border-radius:30px;padding:5px 14px;font:600 .75rem 'JetBrains Mono';display:flex;gap:8px;align-items:center}
+.ver i{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px var(--mid)}
+
+/* título gigante com eco */
+.title{position:absolute;left:50%;top:clamp(40px,8vh,90px);transform:translateX(-50%);z-index:1;text-align:center;pointer-events:none;width:100%}
+.title h1{font-family:'Anton';font-size:clamp(5rem,22vh,15rem);line-height:.9;color:#fff;letter-spacing:.02em;
+  text-shadow:0 2px 0 #cfd3d8,0 4px 0 #c3c7cd,0 14px 30px rgba(0,0,0,.18)}
+.title h1 span{display:inline-block;animation:drop .9s cubic-bezier(.2,1.6,.4,1) both;animation-delay:calc(var(--i)*.08s)}
+@keyframes drop{from{transform:translateY(-60px);opacity:0}}
+.title .echo{font-family:'Anton';font-size:clamp(5rem,22vh,15rem);line-height:.75;color:transparent;-webkit-text-stroke:1.5px #b9bec5;opacity:.7;animation:echo 6s ease-in-out infinite}
+.title .echo:nth-of-type(3){opacity:.35;animation-delay:-3s}
+@keyframes echo{50%{transform:translateY(10px);letter-spacing:.06em}}
+
+/* figura central */
+.hero{grid-column:2;grid-row:2/4;position:relative;z-index:1;display:flex;justify-content:center;align-items:flex-end;min-height:0}
+.hero img{height:100%;max-height:68vh;filter:grayscale(1) contrast(1.1) drop-shadow(0 30px 30px rgba(0,0,0,.25));transition:filter .6s}
+.hero:hover img{filter:grayscale(0) drop-shadow(0 30px 30px rgba(0,0,0,.25))}
+
+/* coluna esquerda */
+.side{grid-row:2/4;display:flex;flex-direction:column;gap:14px;justify-content:center;position:relative;z-index:2}
+.ico{width:clamp(44px,7vh,58px);aspect-ratio:1;background:#fff;border-radius:14px;display:grid;place-items:center;position:relative;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);transition:.3s}
+.ico svg{width:45%;fill:var(--mid)}
+.ico em{position:absolute;top:-8px;right:-10px;background:var(--mid);color:#fff;font:600 .65rem 'JetBrains Mono';font-style:normal;padding:3px 6px;border-radius:12px}
+.ico:hover{background:var(--mid);transform:translateX(6px)}.ico:hover svg{fill:var(--acc)}
+.wave{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border-radius:14px;padding:10px 12px;width:clamp(180px,20vw,240px);border:1px solid #fff}
+.bars{display:flex;gap:2px;align-items:center;height:24px}
+.bars i{width:3px;height:30%;background:var(--mid);border-radius:2px}
+body.playing .bars i{animation:bar .8s ease-in-out infinite alternate}
+.bars i:nth-child(odd){animation-delay:-.4s!important}.bars i:nth-child(3n){animation-delay:-.2s!important}
+@keyframes bar{to{height:100%}}
+.wave div:last-child{min-width:0;font:600 .7rem 'JetBrains Mono'}
+.wave small{color:var(--mut);display:block;font-size:.6rem}
+#song{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.play{width:36px;height:36px;border-radius:10px;border:none;background:var(--mid);color:var(--acc);display:grid;place-items:center;flex-shrink:0;transition:.2s}
+.play svg{width:16px;fill:currentColor}.play:hover{transform:scale(1.12)}
+
+/* volume vertical (estilo COLOR) */
+.volbox{grid-row:2/4;grid-column:3;align-self:center;position:relative;z-index:2;background:#fff;border-radius:22px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.volbox span{font:700 .7rem 'JetBrains Mono';letter-spacing:1px}
+.volbox button{background:none;border:none;display:grid}.volbox svg{width:18px;fill:var(--mid)}
+input[type=range]{-webkit-appearance:none;appearance:none;writing-mode:vertical-lr;direction:rtl;width:34px;height:clamp(140px,32vh,300px);border-radius:20px;
+  background:linear-gradient(0deg,var(--mid) var(--v),#e3e6ea var(--v))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--acc);border:3px solid #fff}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--acc);border:3px solid #fff}
+
+/* cartões inferiores */
+.bottom{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,2vw,30px);position:relative;z-index:3;align-items:end}
+.card{background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-radius:22px;padding:clamp(12px,2vh,20px);border:1px solid #fff;
+  box-shadow:0 14px 40px rgba(0,0,0,.1);transform-style:preserve-3d;transition:transform .2s}
+.prof{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.prof>img{width:clamp(64px,11vh,96px);aspect-ratio:1;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 2px var(--mid);background:var(--base)}
+.prof h2{font-family:'Anton';font-size:clamp(1.4rem,3.6vh,2.2rem);letter-spacing:.03em;display:flex;align-items:center;gap:10px}
+.prof h2 i{font-style:normal;font:600 .6rem 'JetBrains Mono';background:var(--acc);padding:3px 8px;border-radius:10px}
+.prof .id{font:600 .8rem 'JetBrains Mono';color:var(--mut);background:none;border:none;padding:0}
+.prof .id:hover{color:var(--ink)}
+.prof q{display:block;font-size:.8rem;font-weight:600;margin:6px 0 10px}
+.stats{grid-column:1/-1;display:flex;background:var(--mid);color:#fff;border-radius:14px;padding:10px 0}
+.stats div{flex:1;text-align:center;font:700 1rem 'Space Grotesk';border-right:1px solid #444}.stats div:last-child{border:0}
+.stats small{display:block;font:400 .6rem 'JetBrains Mono';color:var(--mut);letter-spacing:1px}
+.about{background:rgba(36,39,44,.88);color:#fff;border-color:#3a3e45}
+.about h3{font:700 .9rem 'JetBrains Mono';display:flex;justify-content:space-between}
+.about h3 b{color:var(--acc)}
+.about p{font:400 .78rem/1.6 'JetBrains Mono';color:#cfd3d8;margin:8px 0}
+.fr{display:flex;gap:10px;margin-top:6px}
+.fr figure{text-align:center;flex:1;min-width:0}
+.fr img{width:100%;max-width:56px;aspect-ratio:1;border-radius:12px;background:#3a3e45;filter:grayscale(1);transition:.3s;border:2px solid transparent}
+.fr figure:hover img{filter:none;border-color:var(--acc);transform:translateY(-4px)}
+.fr figcaption{font:400 .58rem 'JetBrains Mono';color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+footer{grid-column:1/-1;text-align:center;font:400 .7rem 'JetBrains Mono';color:var(--mut);position:relative;z-index:3;letter-spacing:1px}
+footer a{color:var(--ink);font-weight:700;text-decoration:none;background:linear-gradient(var(--acc),var(--acc)) 0 100%/0 40% no-repeat;transition:.3s}
+footer a:hover{background-size:100% 40%}
+
+/* cursor mira */
+.cx,.cy{position:fixed;background:rgba(36,39,44,.18);pointer-events:none;z-index:98}
+.cx{left:0;right:0;height:1px}.cy{top:0;bottom:0;width:1px}
+.cdot{position:fixed;width:14px;height:14px;margin:-7px;border:2px solid var(--mid);pointer-events:none;z-index:99;transition:transform .2s,background .2s}
+.cdot.hov{transform:rotate(45deg) scale(1.6);background:var(--acc)}
+.clbl{position:fixed;font:600 .6rem 'JetBrains Mono';color:var(--mut);pointer-events:none;z-index:99}
+@media(hover:none){.cx,.cy,.cdot,.clbl{display:none}}
+
+#enter{position:fixed;inset:0;z-index:90;background:var(--mid);display:grid;place-items:center;color:var(--base);transition:.7s;font:600 1rem 'JetBrains Mono';letter-spacing:4px}
+#enter b{color:var(--acc)}
+#enter.hide{transform:translateY(-100%)}
+#toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-80px);background:var(--mid);color:var(--acc);padding:8px 18px;border-radius:10px;z-index:95;transition:.4s;font:600 .8rem 'JetBrains Mono'}
+#toast.show{transform:translate(-50%,0)}
+
+@media(max-width:860px){
+  body{grid-template-columns:auto minmax(0,1fr)}.bottom,.card{min-width:0}.stats div{font-size:.85rem}
+  .volbox{display:none}.wave{width:150px}
+  .bottom{grid-template-columns:1fr}.about p{display:none}
+  .prof q{display:none}.title h1{font-size:5rem}.title .echo{font-size:5rem}
+  .hero img{max-height:40vh}
+}
+</style>
+</head>
+<body>
+<svg class="circuit" viewBox="0 0 1000 700" preserveAspectRatio="none">
+  <path d="M0 120 H180 L220 160 V320 H120"/><path d="M1000 90 H820 L780 130 V260"/>
+  <path d="M60 700 V560 L110 510 H260"/><path d="M1000 600 H860 L820 560 V430 H930"/>
+  <path d="M400 0 V60 L440 100 H600 L640 60 V0"/>
+</svg>
+<div class="dots" style="top:18%;right:8%"></div><div class="dots" style="bottom:30%;left:3%"></div>
+
+<div id="enter">[ CLIQUE PARA <b>INICIAR</b> ]</div>
+<div id="toast">ID copiado ✓</div>
+<div class="cx" id="cx"></div><div class="cy" id="cy"></div><div class="cdot" id="cdot"></div><div class="clbl" id="clbl"></div>
+
+<div class="top">
+  <div class="badge">BRA<b>07</b></div>
+  <div class="sub"><b>NOVA</b> GERAÇÃO<br>CRIADOR DIGITAL</div>
+  <div class="ver">VER 3.1 <i></i></div>
+</div>
+
+<div class="title">
+  <h1 data-split>KAITO</h1>
+  <div class="echo">KAITO</div><div class="echo">KAITO</div>
+</div>
+
+<div class="side">
+  <div class="ico"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg><em>99+</em></div>
+  <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.6 6.2L5 21l4-2.2c1 .3 2 .4 3 .4 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></div>
+  <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 21 10.6 19.7C5.4 15 2 12 2 8.4 2 5.4 4.4 3 7.4 3c1.7 0 3.4.8 4.6 2.1C13.2 3.8 14.9 3 16.6 3 19.6 3 22 5.4 22 8.4c0 3.6-3.4 6.6-8.6 11.3z"/></svg><em>99+</em></div>
+  <div class="wave">
+    <button class="play" id="play"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div><small>SHH... TOCANDO</small><span id="song"></span></div>
+  </div>
+</div>
+
+<div class="hero"><img src="https://api.dicebear.com/9.x/notionists/svg?seed=KaitoRen&scale=110" alt="Kaito"></div>
+
+<div class="volbox">
+  <span>VOL</span>
+  <input type="range" id="volume" min="0" max="100">
+  <button id="mute"><svg id="vico" viewBox="0 0 24 24"></svg></button>
+</div>
+
+<div class="bottom">
+  <div class="card prof tilt">
+    <img src="https://api.dicebear.com/9.x/notionists/svg?seed=KaitoRen" alt="">
+    <div>
+      <h2>KAITO REN <i>ONLINE</i></h2>
+      <button class="id" data-copy="#KTR-4410">@kaito.ren · ID #KTR-4410 ⧉</button>
+      <q>Recebo todas as notificações, menos as de cobrança!</q>
+    </div>
+    <div class="stats"><div>214<small>POSTS</small></div><div>48,2K<small>SEGUIDORES</small></div><div>612<small>SEGUINDO</small></div></div>
+  </div>
+  <div class="card about tilt">
+    <h3>SOBRE MIM <b>✱</b></h3>
+    <p>Designer e fotógrafo de 22 anos. Acredito no processo, durmo pouco e transformo café em interfaces. Sonho grande, falo baixo.</p>
+    <div class="fr">
+      <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Lia" alt=""><figcaption>Lia</figcaption></figure>
+      <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Bruno9" alt=""><figcaption>Bruno</figcaption></figure>
+      <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Yara" alt=""><figcaption>Yara</figcaption></figure>
+      <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Theo" alt=""><figcaption>Theo</figcaption></figure>
+      <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Nina42" alt=""><figcaption>Nina</figcaption></figure>
+    </div>
+  </div>
+</div>
+
+<footer>FEITO POR <a href="https://xat.com/rav" target="_blank" rel="noopener">ZARK</a></footer>
+
+<script>
+const MUSIC = { id:"jfKfPfyJRdk", title:"", volume:50 };
+
+/* cursor mira com coordenadas */
+const cx=document.getElementById('cx'),cy=document.getElementById('cy'),cd=document.getElementById('cdot'),cl=document.getElementById('clbl');
+addEventListener('mousemove',e=>{
+  cx.style.top=e.clientY+'px';cy.style.left=e.clientX+'px';
+  cd.style.left=e.clientX+'px';cd.style.top=e.clientY+'px';
+  cl.style.left=e.clientX+14+'px';cl.style.top=e.clientY+14+'px';
+  cl.textContent=`X:${String(e.clientX).padStart(4,'0')} Y:${String(e.clientY).padStart(4,'0')}`;
+});
+document.querySelectorAll('button,a,.ico,figure,.hero').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cd.classList.add('hov'));el.addEventListener('mouseleave',()=>cd.classList.remove('hov'));
+});
+/* inclinação 3D nos cartões */
+document.querySelectorAll('.tilt').forEach(c=>{
+  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    c.style.transform=`perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-4px)`;});
+  c.addEventListener('mouseleave',()=>c.style.transform='');
+});
+</script>
+<script>/* ===== Player YouTube (só áudio) + utilidades ===== */
+(function(){
+  const PREVIEW = /[?&]preview/.test(location.search);
+  if (PREVIEW) { const e=document.getElementById('enter'); if(e) e.remove(); }
+  const $ = id => document.getElementById(id);
+  const M = window.MUSIC || {};
+  const I_PLAY  = '<path d="M8 5v14l11-7z"/>';
+  const I_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  const V_ON  = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/>';
+  const V_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.4-2.4-1.4-1.4-2.4 2.4-2.4-2.4-1.4 1.4 2.4 2.4-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4z"/>';
+
+  /* separa letras para animar: <h1 data-split>Nome</h1> */
+  document.querySelectorAll('[data-split]').forEach(el => {
+    el.innerHTML = [...el.textContent].map((c,i) =>
+      c === ' ' ? '<span class="sp">&nbsp;</span>' : `<span style="--i:${i}">${c}</span>`).join('');
+  });
+
+  /* copiar ID: <button data-copy="#ID"> */
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard && navigator.clipboard.writeText(b.dataset.copy);
+    const t = $('toast'); if (!t) return;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600);
+  }));
+
+  /* iframe escondido */
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:200px;height:200px;opacity:0;pointer-events:none';
+  holder.innerHTML = '<div id="yt"></div>';
+  document.body.appendChild(holder);
+
+  let yt, ready = false, playing = false, want = false;
+  const song = $('song');
+  if (song) song.textContent = M.title || 'Clique em play';
+
+  window.onYouTubeIframeAPIReady = () => {
+    yt = new YT.Player('yt', {
+      videoId: M.id,
+      playerVars: { autoplay:0, controls:0, loop:1, playlist:M.id, playsinline:1 },
+      events: {
+        onReady: () => { ready = true; yt.setVolume(M.volume ?? 50); if (want) yt.playVideo(); },
+        onStateChange: e => {
+          playing = e.data === YT.PlayerState.PLAYING;
+          document.body.classList.toggle('playing', playing);
+          const i = $('ico'); if (i) i.innerHTML = playing ? I_PAUSE : I_PLAY;
+          if (playing && !M.title && song) { const t = yt.getVideoData().title; if (t) song.textContent = t; }
+        }
+      }
+    });
+  };
+  const s = document.createElement('script');
+  if (!PREVIEW) s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+
+  const play = () => { want = true; if (ready) yt.playVideo(); };
+  const pb = $('play');
+  if (pb) pb.addEventListener('click', e => { e.stopPropagation(); if (!ready) return play(); playing ? yt.pauseVideo() : yt.playVideo(); });
+
+  const seek = d => { if (ready) yt.seekTo(Math.max(0, yt.getCurrentTime() + d), true); };
+  $('prev') && $('prev').addEventListener('click', e => { e.stopPropagation(); seek(-10); });
+  $('next') && $('next').addEventListener('click', e => { e.stopPropagation(); seek(10); });
+
+  const v = $('volume');
+  if (v) {
+    v.value = M.volume ?? 50;
+    const upd = () => {
+      v.style.setProperty('--v', v.value + '%');
+      if (ready) { yt.setVolume(+v.value); yt.unMute(); }
+      const vi = $('vico'); if (vi) vi.innerHTML = +v.value === 0 ? V_OFF : V_ON;
+    };
+    v.addEventListener('input', upd); upd();
+    let last = v.value;
+    $('mute') && $('mute').addEventListener('click', e => {
+      e.stopPropagation();
+      if (+v.value > 0) { last = v.value; v.value = 0; } else v.value = last || 50;
+      upd();
+    });
+  }
+
+  /* tela de entrada: o clique libera o som */
+  const en = $('enter');
+  if (en) en.addEventListener('click', () => { en.classList.add('hide'); play(); });
+})();
+</script>
+</body>
+</html>

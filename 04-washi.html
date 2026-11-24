@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hikaru Morimoto · 森本光</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,800;6..96,900&family=Mrs+Saint+Delafield&family=Shippori+Mincho:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* 60% #ebe6dd papel | 30% #161616 nanquim | 10% #c4122f vermelho | #6d665c sépia | #d6cfc3 papel escuro */
+:root{--base:#ebe6dd;--mid:#161616;--acc:#c4122f;--mut:#6d665c;--pap:#d6cfc3}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:var(--base);color:var(--mid);height:100dvh;position:relative;
+  display:grid;grid-template-columns:1.1fr 1fr 1.1fr;grid-template-rows:1fr auto;gap:clamp(10px,2vw,30px);padding:clamp(16px,3vh,34px) clamp(16px,3.5vw,54px) 10px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E")}
+@media(hover:hover){*{cursor:none!important}}
+
+/* ondas seigaiha nos cantos */
+.wave{position:fixed;width:28vw;height:28vh;z-index:0;opacity:.55;
+  background:radial-gradient(circle at 50% 100%,transparent 30%,var(--mid) 31% 33%,transparent 34% 44%,var(--mid) 45% 47%,transparent 48% 58%,var(--mid) 59% 61%,transparent 62%) 0 0/40px 20px;
+  -webkit-mask:linear-gradient(135deg,#000,transparent 60%);mask:linear-gradient(135deg,#000,transparent 60%)}
+.wave.w2{right:0;bottom:0;transform:rotate(180deg)}
+.kanji{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font:700 46vh 'Shippori Mincho';color:var(--mid);opacity:.05;z-index:0;writing-mode:vertical-rl;white-space:nowrap}
+canvas{position:fixed;inset:0;z-index:4;pointer-events:none}
+
+/* esquerda: nome */
+.left{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.jp{font:400 .72rem 'Shippori Mincho';letter-spacing:3px;color:var(--mut)}
+.role{font:600 .65rem 'Inter';letter-spacing:4px;margin:6px 0 4px}
+.name{font:900 clamp(2.4rem,min(5vw,11vh),7rem)/.85 'Bodoni Moda';white-space:nowrap;letter-spacing:-.02em;text-transform:uppercase}
+.name span{display:inline-block;animation:ink 1s both;animation-delay:calc(var(--i)*.07s)}
+@keyframes ink{from{opacity:0;filter:blur(10px);transform:translateY(20px) scaleY(1.4)}}
+.sign{position:relative;height:clamp(60px,12vh,110px);margin-top:-2vh}
+.sign svg{height:100%;overflow:visible}
+.sign text{font:400 clamp(4rem,12vh,7rem) 'Mrs Saint Delafield';fill:none;stroke:var(--acc);stroke-width:1.6;stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 3.5s .8s forwards}
+@keyframes draw{70%{fill:transparent}to{stroke-dashoffset:0;fill:var(--acc)}}
+.quote{margin-top:3vh;border-left:3px solid var(--acc);padding-left:14px;font:700 clamp(.9rem,2.2vh,1.15rem)/1.35 'Inter';text-transform:uppercase;max-width:22ch}
+.quote::before{content:"❝";display:block;font-size:1.6em;line-height:1}
+
+/* centro: círculo com foto */
+.center{position:relative;z-index:2;display:grid;place-items:center;min-height:0}
+.circle{position:relative;width:min(100%,62vh);aspect-ratio:1;border-radius:50%;background:var(--mid);display:grid;place-items:end center;overflow:hidden;
+  box-shadow:0 0 0 10px var(--base),0 0 0 11px var(--mid);transition:transform .8s}
+.circle:hover{transform:rotate(-4deg) scale(1.02)}
+.circle img{width:88%;filter:grayscale(1) contrast(1.2) invert(.92);transition:.8s}
+.circle:hover img{filter:grayscale(0) invert(0)}
+.circle::after{content:"光";position:absolute;top:12%;right:14%;font:700 3rem 'Shippori Mincho';color:var(--acc)}
+.cloud{position:absolute;width:70px;height:20px;border:2px solid var(--mid);border-radius:20px;animation:drift 7s ease-in-out infinite alternate}
+.cloud.c1{left:-4%;top:30%}.cloud.c2{right:-2%;bottom:24%;animation-delay:-3s}
+@keyframes drift{to{transform:translateX(24px)}}
+.branch{position:absolute;right:-6%;bottom:-2%;width:45%;pointer-events:none}
+.branch circle{fill:var(--base);stroke:var(--mid);stroke-width:2;transform-origin:center;transform-box:fill-box;animation:bloom 4s ease-in-out infinite}
+.branch circle:nth-child(odd){animation-delay:-2s}
+@keyframes bloom{50%{transform:scale(1.15)}}
+.hanko{position:absolute;left:4%;bottom:6%;background:var(--acc);color:var(--base);font:700 .9rem 'Shippori Mincho';writing-mode:vertical-rl;padding:10px 6px;border-radius:4px;transform:rotate(-6deg);animation:stamp 1s 2s both}
+@keyframes stamp{from{transform:scale(3) rotate(-30deg);opacity:0}}
+
+/* direita: dados */
+.right{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.8vh,16px);min-height:0}
+.right h3{font:700 .8rem 'Inter';letter-spacing:3px;display:flex;align-items:center;gap:10px}
+.right h3::before{content:"";width:28px;height:2px;background:var(--acc)}
+.bio{font-size:clamp(.72rem,1.6vh,.85rem);line-height:1.6;color:#333}
+.table{border:1px solid var(--mid);border-radius:10px;padding:10px 14px;font-size:clamp(.68rem,1.5vh,.8rem)}
+.row{display:grid;grid-template-columns:24px 92px 1fr;padding:3px 0;position:relative}
+.row::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--acc);transition:.4s}
+.row:hover::after{width:100%}.row:hover{color:var(--acc)}
+.row button{background:none;border:none;font:inherit;color:inherit;text-align:left;text-decoration:underline dotted}
+.friends{display:flex;gap:10px}
+.friends figure{flex:1;text-align:center;min-width:0}
+.friends img{width:100%;max-width:58px;aspect-ratio:1;border-radius:50%;border:2px solid var(--mid);background:var(--pap);filter:grayscale(1);transition:.4s}
+.friends figure:hover img{filter:none;border-color:var(--acc);transform:translateY(-5px) rotate(-6deg)}
+.friends figcaption{font:400 .62rem 'Shippori Mincho';white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* player estilo pergaminho */
+.player{display:flex;align-items:center;gap:12px;background:var(--mid);color:var(--base);border-radius:10px;padding:8px 12px}
+.play{width:40px;height:40px;border-radius:50%;border:2px solid var(--acc);background:none;color:var(--base);display:grid;place-items:center;flex-shrink:0;transition:.3s}
+.play svg{width:16px;fill:currentColor}.play:hover{background:var(--acc)}
+.track{flex:1;min-width:0}.track small{font:400 .6rem 'Shippori Mincho';color:var(--pap);letter-spacing:2px}
+#song{display:block;font-size:.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.playing .track small{color:var(--acc)}
+.player button#mute{background:none;border:none;color:var(--base);display:grid}.player svg{width:18px;fill:currentColor}
+input[type=range]{-webkit-appearance:none;appearance:none;width:80px;height:3px;background:linear-gradient(90deg,var(--acc) var(--v),#555 var(--v))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;background:var(--base);transform:rotate(45deg)}
+input[type=range]::-moz-range-thumb{width:10px;height:10px;border:none;border-radius:0;background:var(--base)}
+
+footer{grid-column:1/-1;display:flex;justify-content:space-between;font:400 .68rem 'Shippori Mincho';color:var(--mut);letter-spacing:2px;position:relative;z-index:2}
+footer a{color:var(--acc);text-decoration:none;font-weight:700}
+footer a:hover{letter-spacing:4px;transition:.3s}
+
+/* cursor nanquim */
+.cur{position:fixed;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--acc);pointer-events:none;z-index:99}
+.ring{position:fixed;width:40px;height:40px;margin:-20px;border-radius:50%;border:1px solid var(--mid);pointer-events:none;z-index:99;transition:width .3s,height .3s,margin .3s,background .3s}
+.ring.hov{width:70px;height:70px;margin:-35px;background:rgba(196,18,47,.12);border-color:var(--acc)}
+@media(hover:none){.cur,.ring{display:none}}
+
+#enter{position:fixed;inset:0;z-index:90;background:var(--base);display:grid;place-items:center;transition:1s}
+#enter div{text-align:center}
+#enter b{display:block;font:700 4rem 'Shippori Mincho';color:var(--acc)}
+#enter span{font:600 .75rem 'Inter';letter-spacing:6px}
+#enter.hide{opacity:0;pointer-events:none;filter:blur(20px)}
+#toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-80px);background:var(--acc);color:var(--base);padding:8px 18px;z-index:95;transition:.4s;font:700 .8rem 'Shippori Mincho'}
+#toast.show{transform:translate(-50%,0)}
+
+@media(max-width:860px){
+  body{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto}
+  .left{grid-column:1/-1}.name{font-size:3rem}.sign{height:50px}.quote,.bio,.branch{display:none}
+  .table{padding:6px 8px}.row{grid-template-columns:18px 70px 1fr}
+  input[type=range]{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wave"></div><div class="wave w2"></div>
+<div class="kanji">未来を信じて</div>
+<canvas id="petals"></canvas>
+<div id="enter"><div><b>光</b><span>CLIQUE PARA ENTRAR</span></div></div>
+<div id="toast">ID copiado 印</div>
+<div class="cur" id="cur"></div><div class="ring" id="ring"></div>
+
+<section class="left">
+  <div class="jp">未来を信じて、夢を追い続ける。</div>
+  <div class="role">CRIADOR · DESIGNER · SONHADOR</div>
+  <h1 class="name" data-split>Morimoto</h1>
+  <div class="sign"><svg viewBox="0 0 420 110"><text x="0" y="90">Hikaru</text></svg></div>
+  <div class="quote">Criatividade é a minha forma de falar sem limites.</div>
+</section>
+
+<section class="center">
+  <div class="cloud c1"></div><div class="cloud c2"></div>
+  <div class="circle"><img src="https://api.dicebear.com/9.x/notionists/svg?seed=HikaruM&scale=120" alt="Hikaru"></div>
+  <svg class="branch" viewBox="0 0 200 160"><path d="M200 160 C150 120 120 90 40 40 M120 92 C110 60 120 40 140 20 M80 66 C60 70 40 90 20 90" fill="none" stroke="#161616" stroke-width="3"/>
+    <circle cx="40" cy="40" r="12"/><circle cx="140" cy="20" r="10"/><circle cx="20" cy="90" r="11"/><circle cx="100" cy="76" r="8"/><circle cx="160" cy="120" r="9"/></svg>
+  <div class="hanko">森本光</div>
+</section>
+
+<section class="right">
+  <h3>SOBRE MIM</h3>
+  <p class="bio">Sou um criador visual que mistura tipografia japonesa com design contemporâneo. Acredito que cada traço carrega uma intenção e que boas ideias nascem do silêncio.</p>
+  <div class="table">
+    <div class="row"><span>◎</span><span>Nome</span><span>Hikaru Morimoto</span></div>
+    <div class="row"><span>✎</span><span>Apelido</span><span>Hika</span></div>
+    <div class="row"><span>◷</span><span>Nascimento</span><span>12 mar 2003</span></div>
+    <div class="row"><span>⌂</span><span>Origem</span><span>Kyoto · Japão</span></div>
+    <div class="row"><span>✦</span><span>Signo</span><span>Peixes ♓</span></div>
+    <div class="row"><span>#</span><span>ID</span><button data-copy="#HKR-1203">#HKR-1203 (copiar)</button></div>
+  </div>
+  <h3>AMIGOS</h3>
+  <div class="friends">
+    <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Aiko" alt=""><figcaption>Aiko</figcaption></figure>
+    <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Daichi" alt=""><figcaption>Daichi</figcaption></figure>
+    <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Emi" alt=""><figcaption>Emi</figcaption></figure>
+    <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Kenji" alt=""><figcaption>Kenji</figcaption></figure>
+    <figure><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Sayuri" alt=""><figcaption>Sayuri</figcaption></figure>
+  </div>
+  <div class="player">
+    <button class="play" id="play"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="track"><small>音楽 · TOCANDO</small><span id="song"></span></div>
+    <button id="mute"><svg id="vico" viewBox="0 0 24 24"></svg></button>
+    <input type="range" id="volume" min="0" max="100">
+  </div>
+</section>
+
+<footer><span>信じることがすべてを変える。</span><span>Feito por <a href="https://xat.com/rav" target="_blank" rel="noopener">Zark</a></span><span>BRA / 2026 / HKR</span></footer>
+
+<script>
+const MUSIC = { id:"jfKfPfyJRdk", title:"", volume:45 };
+
+/* pétalas caindo */
+const cv=document.getElementById('petals'),c=cv.getContext('2d');let W,H,P=[];
+const rs=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};rs();addEventListener('resize',rs);
+for(let i=0;i<28;i++)P.push({x:Math.random()*W,y:Math.random()*H,s:4+Math.random()*6,v:.4+Math.random()*.8,a:Math.random()*6,r:Math.random()*6});
+(function loop(){c.clearRect(0,0,W,H);
+  for(const p of P){p.y+=p.v;p.x+=Math.sin(p.a+=.01)*.6;p.r+=.02;if(p.y>H+10){p.y=-10;p.x=Math.random()*W}
+    c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.s>8?'rgba(196,18,47,.55)':'rgba(22,22,22,.25)';
+    c.beginPath();c.ellipse(0,0,p.s,p.s/2,0,0,7);c.fill();c.restore();}
+  requestAnimationFrame(loop)})();
+
+/* cursor com anel atrasado */
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');let mx=0,my=0,rx=0,ry=0;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function f(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(f)})();
+document.querySelectorAll('button,a,figure,.row,.circle').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('hov'));el.addEventListener('mouseleave',()=>ring.classList.remove('hov'));
+});
+</script>
+<script>/* ===== Player YouTube (só áudio) + utilidades ===== */
+(function(){
+  const PREVIEW = /[?&]preview/.test(location.search);
+  if (PREVIEW) { const e=document.getElementById('enter'); if(e) e.remove(); }
+  const $ = id => document.getElementById(id);
+  const M = window.MUSIC || {};
+  const I_PLAY  = '<path d="M8 5v14l11-7z"/>';
+  const I_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  const V_ON  = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/>';
+  const V_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.4-2.4-1.4-1.4-2.4 2.4-2.4-2.4-1.4 1.4 2.4 2.4-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4z"/>';
+
+  /* separa letras para animar: <h1 data-split>Nome</h1> */
+  document.querySelectorAll('[data-split]').forEach(el => {
+    el.innerHTML = [...el.textContent].map((c,i) =>
+      c === ' ' ? '<span class="sp">&nbsp;</span>' : `<span style="--i:${i}">${c}</span>`).join('');
+  });
+
+  /* copiar ID: <button data-copy="#ID"> */
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard && navigator.clipboard.writeText(b.dataset.copy);
+    const t = $('toast'); if (!t) return;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600);
+  }));
+
+  /* iframe escondido */
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:200px;height:200px;opacity:0;pointer-events:none';
+  holder.innerHTML = '<div id="yt"></div>';
+  document.body.appendChild(holder);
+
+  let yt, ready = false, playing = false, want = false;
+  const song = $('song');
+  if (song) song.textContent = M.title || 'Clique em play';
+
+  window.onYouTubeIframeAPIReady = () => {
+    yt = new YT.Player('yt', {
+      videoId: M.id,
+      playerVars: { autoplay:0, controls:0, loop:1, playlist:M.id, playsinline:1 },
+      events: {
+        onReady: () => { ready = true; yt.setVolume(M.volume ?? 50); if (want) yt.playVideo(); },
+        onStateChange: e => {
+          playing = e.data === YT.PlayerState.PLAYING;
+          document.body.classList.toggle('playing', playing);
+          const i = $('ico'); if (i) i.innerHTML = playing ? I_PAUSE : I_PLAY;
+          if (playing && !M.title && song) { const t = yt.getVideoData().title; if (t) song.textContent = t; }
+        }
+      }
+    });
+  };
+  const s = document.createElement('script');
+  if (!PREVIEW) s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+
+  const play = () => { want = true; if (ready) yt.playVideo(); };
+  const pb = $('play');
+  if (pb) pb.addEventListener('click', e => { e.stopPropagation(); if (!ready) return play(); playing ? yt.pauseVideo() : yt.playVideo(); });
+
+  const seek = d => { if (ready) yt.seekTo(Math.max(0, yt.getCurrentTime() + d), true); };
+  $('prev') && $('prev').addEventListener('click', e => { e.stopPropagation(); seek(-10); });
+  $('next') && $('next').addEventListener('click', e => { e.stopPropagation(); seek(10); });
+
+  const v = $('volume');
+  if (v) {
+    v.value = M.volume ?? 50;
+    const upd = () => {
+      v.style.setProperty('--v', v.value + '%');
+      if (ready) { yt.setVolume(+v.value); yt.unMute(); }
+      const vi = $('vico'); if (vi) vi.innerHTML = +v.value === 0 ? V_OFF : V_ON;
+    };
+    v.addEventListener('input', upd); upd();
+    let last = v.value;
+    $('mute') && $('mute').addEventListener('click', e => {
+      e.stopPropagation();
+      if (+v.value > 0) { last = v.value; v.value = 0; } else v.value = last || 50;
+      upd();
+    });
+  }
+
+  /* tela de entrada: o clique libera o som */
+  const en = $('enter');
+  if (en) en.addEventListener('click', () => { en.classList.add('hide'); play(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucas Ventura · Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+/* 60% #040b1f azul-noite | 30% #0d3a8c azul royal | 10% #ffc21a ouro | #ffffff | #9db3dd */
+:root{--base:#040b1f;--mid:#0d3a8c;--acc:#ffc21a;--w:#ffffff;--mut:#9db3dd}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Poppins',sans-serif;background:var(--base);color:var(--w);height:100dvh;position:relative;
+  display:grid;grid-template-columns:1fr 1.1fr;grid-template-rows:auto 1fr auto auto;gap:clamp(8px,1.6vh,16px) clamp(14px,3vw,40px);padding:clamp(14px,3vh,30px) clamp(16px,4vw,60px) 8px}
+@media(hover:hover){*{cursor:none!important}}
+/* holofote que segue o mouse */
+.spot{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(500px circle at var(--x,70%) var(--y,40%),rgba(13,58,140,.65),transparent 60%),radial-gradient(ellipse at 100% 0,rgba(13,58,140,.5),transparent 50%)}
+.beam{position:fixed;top:-20%;left:60%;width:30vw;height:140%;background:linear-gradient(90deg,transparent,rgba(157,179,221,.08),transparent);transform:rotate(20deg);z-index:0;animation:beam 9s ease-in-out infinite alternate}
+@keyframes beam{to{left:30%}}
+.script-bg{position:fixed;right:-4vw;top:6vh;font:400 22vh 'Great Vibes';color:var(--w);opacity:.04;z-index:0;white-space:nowrap}
+
+header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:3}
+.brand{text-align:right;line-height:1}
+.brand b{font:600 clamp(1.1rem,2.4vh,1.5rem) 'Poppins'}
+.brand small{display:block;background:var(--acc);color:var(--base);font-size:.6rem;font-weight:700;padding:2px 6px;margin-top:3px;display:inline-block}
+.idchip{display:flex;align-items:center;gap:10px;font-size:.75rem;color:var(--mut);border:1px solid rgba(157,179,221,.3);border-radius:30px;padding:5px 6px 5px 14px}
+.idchip b{color:var(--w)}
+.idchip button{border:none;background:var(--acc);color:var(--base);border-radius:20px;padding:4px 12px;font:700 .7rem 'Poppins';transition:.3s}
+.idchip button:hover{box-shadow:0 0 18px var(--acc)}
+
+/* texto */
+.info{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,2vh,18px);min-height:0}
+.kick{font-size:.72rem;letter-spacing:4px;color:var(--acc);font-weight:600}
+.name{position:relative;font:600 clamp(2.6rem,9vh,5.6rem)/1 'Poppins';letter-spacing:-.02em}
+.name .ln{display:block;overflow:hidden}
+.name .ln span{display:inline-block;animation:up .9s cubic-bezier(.2,.9,.2,1) both;animation-delay:calc(var(--i)*.05s)}
+.name .ln:nth-child(2) span{animation-delay:calc(.3s + var(--i)*.05s)}
+@keyframes up{from{transform:translateY(110%)}}
+.name em{position:absolute;left:52%;top:-14%;font:400 clamp(2.4rem,8vh,5rem) 'Great Vibes';color:var(--acc);font-style:normal;transform:rotate(-8deg);
+  background:linear-gradient(90deg,var(--acc) 40%,#fff3c4 50%,var(--acc) 60%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gold 4s linear infinite}
+@keyframes gold{to{background-position:-300% 0}}
+.bio{max-width:44ch;font-size:clamp(.76rem,1.75vh,.92rem);line-height:1.7;color:var(--mut);font-weight:300}
+.cta{align-self:flex-start;background:var(--mid);color:var(--w);border:1px solid #2f6be0;border-radius:6px;padding:10px 26px;font:400 .9rem 'Poppins';box-shadow:0 0 30px rgba(47,107,224,.45);transition:.3s}
+.cta:hover{background:var(--acc);color:var(--base);border-color:var(--acc);box-shadow:0 0 40px rgba(255,194,26,.5)}
+
+/* leque de projetos + foto */
+.show{position:relative;z-index:1;min-height:0;display:grid;place-items:center}
+.fan{position:absolute;inset:0;display:grid;place-items:center}
+.pc{position:absolute;width:clamp(120px,14vw,200px);aspect-ratio:3/4;border-radius:10px;padding:12px;display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(160deg,var(--mid),var(--base));border:1px solid rgba(157,179,221,.25);box-shadow:0 20px 40px rgba(0,0,0,.5);
+  transform:rotate(var(--r)) translateX(var(--tx));transition:transform .6s cubic-bezier(.2,.9,.2,1)}
+.pc b{font-size:clamp(.8rem,1.8vh,1.1rem);line-height:1.1}.pc small{font-size:.6rem;color:var(--acc)}
+.pc i{position:absolute;top:12px;left:12px;width:30%;aspect-ratio:1;border-radius:50%;background:var(--acc);opacity:.8}
+.pc:nth-child(2) i{border-radius:4px;background:var(--mut)}.pc:nth-child(4) i{width:60%;height:8px;border-radius:4px}
+.show:hover .pc,.show.open .pc{transform:rotate(calc(var(--r)*1.6)) translateX(calc(var(--tx)*1.7)) translateY(-10px)}
+.me{position:relative;z-index:2;height:min(100%,56vh);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(13,58,140,.9),transparent 70%);display:grid;place-items:end center;transition:transform .3s}
+.me img{height:100%;filter:drop-shadow(0 20px 30px rgba(0,0,0,.6))}
+.note{position:absolute;z-index:3;left:4%;top:16%;background:rgba(4,11,31,.85);border:1px solid rgba(157,179,221,.25);backdrop-filter:blur(8px);border-radius:10px;padding:10px 14px;font-size:.78rem;max-width:180px;animation:hover 4s ease-in-out infinite}
+.note b{color:var(--acc)}
+@keyframes hover{50%{transform:translateY(-8px)}}
+
+/* amigos + player */
+.friends{position:relative;z-index:3;display:flex;align-items:center;gap:14px;background:rgba(13,58,140,.25);border:1px solid rgba(157,179,221,.18);border-radius:14px;padding:10px 14px;backdrop-filter:blur(8px)}
+.friends>small{font-size:.65rem;letter-spacing:3px;color:var(--mut);writing-mode:vertical-rl;transform:rotate(180deg)}
+.fr{flex:1;text-align:center;min-width:0;transition:.3s}
+.fr img{width:clamp(36px,6vh,50px);aspect-ratio:1;border-radius:50%;background:var(--mid);border:2px solid transparent;transition:.3s}
+.fr span{display:block;font-size:.65rem;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr:hover img{border-color:var(--acc);transform:scale(1.15)}.fr:hover span{color:var(--acc)}
+.player{position:relative;z-index:3;display:flex;align-items:center;gap:14px;background:rgba(4,11,31,.8);border:1px solid rgba(157,179,221,.2);border-radius:14px;padding:10px 14px;backdrop-filter:blur(8px)}
+#play{width:48px;height:48px;border-radius:12px;border:none;background:var(--acc);color:var(--base);display:grid;place-items:center;flex-shrink:0;transition:.3s}
+#play svg{width:20px;fill:currentColor}
+body.playing #play{box-shadow:0 0 0 6px rgba(255,194,26,.2),0 0 24px var(--acc)}
+.tr{flex:1;min-width:0}.tr small{font-size:.6rem;letter-spacing:3px;color:var(--mut)}
+#song{display:block;font-weight:600;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog{height:3px;background:rgba(157,179,221,.2);border-radius:3px;margin-top:6px;overflow:hidden}
+.prog i{display:block;height:100%;width:30%;background:var(--acc);transform:translateX(-100%)}
+body.playing .prog i{animation:prog 2.4s ease-in-out infinite}
+@keyframes prog{to{transform:translateX(340%)}}
+#mute{background:none;border:none;color:var(--w);display:grid}#mute svg{width:20px;fill:currentColor}
+input[type=range]{-webkit-appearance:none;appearance:none;width:90px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--acc) var(--v),rgba(157,179,221,.25) var(--v))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--w)}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border:none;border-radius:50%;background:var(--w)}
+
+footer{grid-column:1/-1;position:relative;z-index:3;text-align:center;font-size:.72rem;color:var(--mut)}
+footer a{color:var(--acc);font-weight:700;text-decoration:none;font-family:'Great Vibes';font-size:1.3rem;transition:.3s;display:inline-block}
+footer a:hover{transform:scale(1.2) rotate(-4deg)}
+
+/* cursor anel */
+.cur{position:fixed;width:34px;height:34px;margin:-17px;border-radius:50%;border:1.5px solid var(--acc);pointer-events:none;z-index:99;transition:width .3s,height .3s,margin .3s,background .3s}
+.cur::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px;border-radius:50%;background:var(--acc)}
+.cur.hov{width:64px;height:64px;margin:-32px;background:rgba(255,194,26,.12)}
+@media(hover:none){.cur{display:none}}
+
+#enter{position:fixed;inset:0;z-index:90;background:var(--base);display:grid;place-items:center;transition:.9s}
+#enter p{font:400 clamp(3rem,9vw,6rem) 'Great Vibes';color:var(--acc)}
+#enter small{display:block;text-align:center;letter-spacing:6px;font-size:.7rem;color:var(--mut)}
+#enter.hide{opacity:0;pointer-events:none;transform:translateY(-30px)}
+#toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-80px);background:var(--acc);color:var(--base);padding:8px 18px;border-radius:8px;z-index:95;transition:.4s;font-weight:700;font-size:.8rem}
+#toast.show{transform:translate(-50%,0)}
+
+@media(max-width:860px){
+  body{grid-template-columns:1fr;grid-template-rows:auto auto 1fr auto auto auto}
+  .info{order:0}.bio{font-size:.72rem}.name em{font-size:2.2rem}.cta,.note{display:none}
+  .pc{width:90px}.me{height:28vh}.friends>small,input[type=range]{display:none}
+}
+</style>
+</head>
+<body>
+<div class="spot" id="spot"></div><div class="beam"></div><div class="script-bg">Ventura</div>
+<div id="enter"><div><p>Ventura</p><small>CLIQUE PARA ENTRAR</small></div></div>
+<div id="toast">ID copiado ✓</div>
+<div class="cur" id="cur"></div>
+
+<header>
+  <div class="idchip">ID <b>#VNT-7310</b><button data-copy="#VNT-7310">copiar</button></div>
+  <div class="brand"><b>Ventura Studio</b><br><small>AGÊNCIA DIGITAL</small></div>
+</header>
+
+<section class="info">
+  <div class="kick">DESIGNER · DIRETOR CRIATIVO</div>
+  <h1 class="name"><span class="ln" data-split>Lucas</span><span class="ln" data-split>Ventura</span><em>Creative</em></h1>
+  <p class="bio">Crio campanhas, embalagens e identidades visuais que fazem marcas pequenas parecerem gigantes. São 6 anos transformando briefings confusos em peças que vendem — com muito azul, um toque de ouro e café sem açúcar.</p>
+  <button class="cta" onclick="document.querySelector('.show').classList.toggle('open')">Ver galeria →</button>
+</section>
+
+<section class="show">
+  <div class="fan">
+    <div class="pc" style="--r:-24deg;--tx:-130%"><i></i><small>BRANDING</small><b>Café Aurora</b></div>
+    <div class="pc" style="--r:-12deg;--tx:-65%"><i></i><small>SOCIAL</small><b>Pix Rápido</b></div>
+    <div class="pc" style="--r:0deg;--tx:0%"><i></i><small>CAMPANHA</small><b>Estamos AO VIVO</b></div>
+    <div class="pc" style="--r:12deg;--tx:65%"><i></i><small>APP</small><b>Bolso Fácil</b></div>
+    <div class="pc" style="--r:24deg;--tx:130%"><i></i><small>EDITORIAL</small><b>Asas do Vento</b></div>
+  </div>
+  <div class="me" id="me"><img src="https://api.dicebear.com/9.x/notionists/svg?seed=LucasVentura&scale=115" alt="Lucas"></div>
+  <div class="note">mais projetos no meu <b>Pinterest</b> ✦</div>
+</section>
+
+<div class="friends">
+  <small>EQUIPE</small>
+  <div class="fr"><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Ana" alt=""><span>Ana Brito</span></div>
+  <div class="fr"><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Caio" alt=""><span>Caio Reis</span></div>
+  <div class="fr"><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Duda" alt=""><span>Duda Neves</span></div>
+  <div class="fr"><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Igor" alt=""><span>Igor Paz</span></div>
+  <div class="fr"><img src="https://api.dicebear.com/9.x/notionists/svg?seed=Tati" alt=""><span>Tati Luz</span></div>
+</div>
+<div class="player">
+  <button id="play"><svg id="ico" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+  <div class="tr"><small>TRILHA DO ESTÚDIO</small><span id="song"></span><div class="prog"><i></i></div></div>
+  <button id="mute"><svg id="vico" viewBox="0 0 24 24"></svg></button>
+  <input type="range" id="volume" min="0" max="100">
+</div>
+
+<footer>Feito por <a href="https://xat.com/rav" target="_blank" rel="noopener">Zark</a></footer>
+
+<script>
+const MUSIC = { id:"jfKfPfyJRdk", title:"", volume:50 };
+const spot=document.getElementById('spot'),cur=document.getElementById('cur'),me=document.getElementById('me');
+addEventListener('mousemove',e=>{
+  spot.style.setProperty('--x',e.clientX+'px');spot.style.setProperty('--y',e.clientY+'px');
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  me.style.transform=`translate(${(e.clientX/innerWidth-.5)*16}px,${(e.clientY/innerHeight-.5)*10}px)`;
+});
+document.querySelectorAll('button,a,.fr,.pc').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hov'));el.addEventListener('mouseleave',()=>cur.classList.remove('hov'))});
+</script>
+<script>/* ===== Player YouTube (só áudio) + utilidades ===== */
+(function(){
+  const PREVIEW = /[?&]preview/.test(location.search);
+  if (PREVIEW) { const e=document.getElementById('enter'); if(e) e.remove(); }
+  const $ = id => document.getElementById(id);
+  const M = window.MUSIC || {};
+  const I_PLAY  = '<path d="M8 5v14l11-7z"/>';
+  const I_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  const V_ON  = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/>';
+  const V_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.4-2.4-1.4-1.4-2.4 2.4-2.4-2.4-1.4 1.4 2.4 2.4-2.4 2.4 1.4 1.4 2.4-2.4 2.4 2.4 1.4-1.4z"/>';
+
+  /* separa letras para animar: <h1 data-split>Nome</h1> */
+  document.querySelectorAll('[data-split]').forEach(el => {
+    el.innerHTML = [...el.textContent].map((c,i) =>
+      c === ' ' ? '<span class="sp">&nbsp;</span>' : `<span style="--i:${i}">${c}</span>`).join('');
+  });
+
+  /* copiar ID: <button data-copy="#ID"> */
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard && navigator.clipboard.writeText(b.dataset.copy);
+    const t = $('toast'); if (!t) return;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600);
+  }));
+
+  /* iframe escondido */
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:200px;height:200px;opacity:0;pointer-events:none';
+  holder.innerHTML = '<div id="yt"></div>';
+  document.body.appendChild(holder);
+
+  let yt, ready = false, playing = false, want = false;
+  const song = $('song');
+  if (song) song.textContent = M.title || 'Clique em play';
+
+  window.onYouTubeIframeAPIReady = () => {
+    yt = new YT.Player('yt', {
+      videoId: M.id,
+      playerVars: { autoplay:0, controls:0, loop:1, playlist:M.id, playsinline:1 },
+      events: {
+        onReady: () => { ready = true; yt.setVolume(M.volume ?? 50); if (want) yt.playVideo(); },
+        onStateChange: e => {
+          playing = e.data === YT.PlayerState.PLAYING;
+          document.body.classList.toggle('playing', playing);
+          const i = $('ico'); if (i) i.innerHTML = playing ? I_PAUSE : I_PLAY;
+          if (playing && !M.title && song) { const t = yt.getVideoData().title; if (t) song.textContent = t; }
+        }
+      }
+    });
+  };
+  const s = document.createElement('script');
+  if (!PREVIEW) s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+
+  const play = () => { want = true; if (ready) yt.playVideo(); };
+  const pb = $('play');
+  if (pb) pb.addEventListener('click', e => { e.stopPropagation(); if (!ready) return play(); playing ? yt.pauseVideo() : yt.playVideo(); });
+
+  const seek = d => { if (ready) yt.seekTo(Math.max(0, yt.getCurrentTime() + d), true); };
+  $('prev') && $('prev').addEventListener('click', e => { e.stopPropagation(); seek(-10); });
+  $('next') && $('next').addEventListener('click', e => { e.stopPropagation(); seek(10); });
+
+  const v = $('volume');
+  if (v) {
+    v.value = M.volume ?? 50;
+    const upd = () => {
+      v.style.setProperty('--v', v.value + '%');
+      if (ready) { yt.setVolume(+v.value); yt.unMute(); }
+      const vi = $('vico'); if (vi) vi.innerHTML = +v.value === 0 ? V_OFF : V_ON;
+    };
+    v.addEventListener('input', upd); upd();
+    let last = v.value;
+    $('mute') && $('mute').addEventListener('click', e => {
+      e.stopPropagation();
+      if (+v.value > 0) { last = v.value; v.value = 0; } else v.value = last || 50;
+      upd();
+    });
+  }
+
+  /* tela de entrada: o clique libera o som */
+  const en = $('enter');
+  if (en) en.addEventListener('click', () => { en.classList.add('hide'); play(); });
+})();
+</script>
+</body>
+</html>
